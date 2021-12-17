@@ -5,73 +5,87 @@ import type Entry from "/type/database/Entry";
 import Util from "../util";
 const collection = "entries";
 
-export default function registerEntryHandlers(knexEntry: Knex) {
+export default function registerEntryHandlers(knexClient: Knex) {
   ipcMain.handle("getEntries", async (event, data) => {
-    return await getEntries(knexEntry);
+    return await getEntries(knexClient);
   });
 
   ipcMain.handle("getEntriesByClientID", async (event, data: id) => {
-    return await getEntriesByClientID(knexEntry, data);
+    return await getEntriesByClientID(knexClient, data);
   });
 
   ipcMain.handle("getEntriesByUserID", async (event, data: id) => {
-    return await getEntriesByUserID(knexEntry, data);
+    return await getEntriesByUserID(knexClient, data);
+  });
+
+  ipcMain.handle("getEntriesByID", async (event, data: id) => {
+    return await getEntryByID(knexClient, data);
   });
 
   ipcMain.handle("addEntry", async (event, data: Entry) => {
-    return await addEntry(knexEntry, data);
+    return await addEntry(knexClient, data);
   });
 
   ipcMain.handle("updateEntry", async (event, data: Entry) => {
-    return await updateEntry(knexEntry, data);
+    return await updateEntry(knexClient, data);
   });
 
   ipcMain.handle("deleteEntry", async (event, data: id) => {
-    return await deleteEntry(knexEntry, data);
+    return await deleteEntry(knexClient, data);
   });
 }
 
-export async function getEntries(knexEntry: Knex): Promise<Entry[]> {
-  return (await knexEntry.select("*").from(collection)) as Entry[];
+export async function getEntries(knexClient: Knex): Promise<Entry[]> {
+  return (await knexClient.select("*").from(collection)) as Entry[];
 }
 
 export async function getEntriesByClientID(
-  knexEntry: Knex,
+  knexClient: Knex,
   id: id
-): Promise<Entry> {
-  let Entry = (await knexEntry
+): Promise<Entry[]> {
+  let entry = (await knexClient
     .select("*")
     .from(collection)
     .where({
       clientID: `${id}`,
     })) as Entry[];
-  return Entry[0];
+  return entry;
 }
 
 export async function getEntriesByUserID(
-  knexEntry: Knex,
+  knexClient: Knex,
   id: id
-): Promise<Entry> {
-  let Entry = (await knexEntry
+): Promise<Entry[]> {
+  let entry = (await knexClient
     .select("*")
     .from(collection)
     .where({
       userID: `${id}`,
     })) as Entry[];
-  return Entry[0];
+  return entry;
 }
 
-export async function addEntry(knexEntry: Knex, Entry: Entry) {
+export async function getEntryByID(knexClient: Knex, id: id): Promise<Entry> {
+  let entry = (await knexClient
+    .select("*")
+    .from(collection)
+    .where({
+      id: `${id}`,
+    })) as Entry[];
+  return entry[0];
+}
+
+export async function addEntry(knexClient: Knex, Entry: Entry) {
   let id = Util.generateID();
   let exportEntry: Entry = {
     ...Entry,
     id: id,
   };
-  await knexEntry.table(collection).insert(exportEntry);
+  await knexClient.table(collection).insert(exportEntry);
 }
 
-export async function updateEntry(knexEntry: Knex, Entry: Entry) {
-  await knexEntry
+export async function updateEntry(knexClient: Knex, Entry: Entry) {
+  await knexClient
     .table(collection)
     .where({
       id: `${Entry.id}`,
@@ -79,8 +93,8 @@ export async function updateEntry(knexEntry: Knex, Entry: Entry) {
     .update(Entry);
 }
 
-export async function deleteEntry(knexEntry: Knex, id: id) {
-  await knexEntry
+export async function deleteEntry(knexClient: Knex, id: id) {
+  await knexClient
     .table(collection)
     .where({
       id: `${id}`,
