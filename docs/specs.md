@@ -22,9 +22,9 @@
 - clientID: string
 - userID: string
 - text: string
-- isFix: number[0,1]
+- fixedAmount?: number
 - invoiceID?: string
-- hours: isFix?0:number
+- hours: number
 - amount?: number
 
 ### Invoice
