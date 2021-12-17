@@ -1,4 +1,4 @@
-import id from "../util/Id";
+import type id from "../util/Id";
 
 export default interface Entry {
 	id?: id,

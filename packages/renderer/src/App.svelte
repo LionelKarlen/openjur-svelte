@@ -3,9 +3,10 @@
   import Counter from "./lib/Counter.svelte";
   import "./tailwind.css";
   import ipc from "./services/ipcService";
-  let data;
+  import type Client from "/type/database/Client";
+  let data: Client;
   async function getClients() {
-    data = await ipc.invoke("getClients");
+    data = await ipc.invoke("getClientByID", "0");
   }
   getClients();
   $: console.log(data);
@@ -13,7 +14,13 @@
 
 <main>
   <img src={logo} alt="Svelte Logo" />
-  <h1>Hello Electron!</h1>
+  {#if data != null}
+    <!-- content here -->
+    <h1>{data.name}</h1>
+  {:else}
+    <!-- else content here -->
+    <h1>Hello!</h1>
+  {/if}
 
   <Counter />
 
