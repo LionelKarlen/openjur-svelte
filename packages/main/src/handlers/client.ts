@@ -23,7 +23,7 @@ export default function registerClientHandlers(knexClient: Knex) {
   });
 
   ipcMain.handle("deleteClient", async (event, data: id) => {
-    return await deleteClientByID(knexClient, data);
+    return await deleteClient(knexClient, data);
   });
 }
 
@@ -59,7 +59,7 @@ export async function updateClient(knexClient: Knex, client: Client) {
     .update(client);
 }
 
-export async function deleteClientByID(knexClient: Knex, id: id) {
+export async function deleteClient(knexClient: Knex, id: id) {
   await knexClient
     .table(collection)
     .where({
