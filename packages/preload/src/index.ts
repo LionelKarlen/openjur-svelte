@@ -1,4 +1,5 @@
-import { contextBridge } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
+import { ElectronApi } from "types/electron-api";
 
 const apiKey = "electron";
 /**
@@ -6,6 +7,7 @@ const apiKey = "electron";
  */
 const api: ElectronApi = {
   versions: process.versions,
+  ipc: ipcRenderer,
 };
 
 /**

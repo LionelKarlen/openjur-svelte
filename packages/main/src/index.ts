@@ -1,6 +1,8 @@
 import { app, BrowserWindow, shell } from "electron";
 import { join } from "path";
 import { URL } from "url";
+import knex from "knex";
+import registerHandlers from "./handler";
 
 const isSingleInstance = app.requestSingleInstanceLock();
 const isDevelopment = import.meta.env.MODE === "development";
@@ -12,21 +14,20 @@ if (!isSingleInstance) {
 
 app.disableHardwareAcceleration();
 
-// Install "Vue.js devtools"
-if (isDevelopment) {
-  app
-    .whenReady()
-    .then(() => import("electron-devtools-installer"))
-    .then(({ default: installExtension, VUEJS3_DEVTOOLS }) =>
-      installExtension(VUEJS3_DEVTOOLS, {
-        loadExtensionOptions: {
-          allowFileAccess: true,
-        },
-      })
-    )
-    .catch((e) => console.error("Failed install extension:", e));
-}
+let dbpath = !isDevelopment
+  ? join(process.resourcesPath, "defaultFiles", "db.sqlite")
+  : join(process.resourcesPath, "..", "..", "..", "..", "res", "test.sqlite");
+console.log(dbpath);
 
+let knexClient = knex({
+  client: "sqlite3",
+  connection: {
+    filename: dbpath,
+  },
+  useNullAsDefault: true,
+});
+
+registerHandlers(knexClient);
 let mainWindow: BrowserWindow | null = null;
 
 const createWindow = async () => {

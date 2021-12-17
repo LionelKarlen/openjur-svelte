@@ -2,6 +2,13 @@
   import logo from "./assets/svelte.png";
   import Counter from "./lib/Counter.svelte";
   import "./tailwind.css";
+  import ipc from "./services/ipcService";
+  let data;
+  async function getClients() {
+    data = await ipc.invoke("getClients");
+  }
+  getClients();
+  $: console.log(data);
 </script>
 
 <main>
