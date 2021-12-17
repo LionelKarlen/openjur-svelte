@@ -1,4 +1,4 @@
-import Address from '../util/Address';
+import type Address from '../util/Address';
 export default interface Settings extends Address {
 	MWST: number,
 	clientTemplatePath: string,

@@ -1,6 +1,6 @@
-import Entry from "../database/Entry";
-import ExportParams from "../util/ExportParams";
-import id from "../util/Id";
+import type Entry from "../database/Entry";
+import type ExportParams from "../util/ExportParams";
+import type id from "../util/Id";
 
 export default interface ExportData extends ExportParams{
 	date: string,

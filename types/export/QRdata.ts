@@ -1,5 +1,5 @@
-import Creditor from "../util/Creditor";
-import Debtor from "../util/Debtor";
+import type Creditor from "../util/Creditor";
+import type Debtor from "../util/Debtor";
 export default interface QRData {
   currency: string;
   amount: number;
