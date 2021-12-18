@@ -53,3 +53,14 @@ export async function deleteWageByClientID(knexClient: Knex, id: id) {
     })
     .delete();
 }
+
+export async function getWage(knexClient: Knex, clientID: id, userID: id) {
+  let wage = (await knexClient
+    .select("*")
+    .from(collection)
+    .where({
+      userID: `${userID}`,
+      clientID: `${clientID}`,
+    })) as Wage[];
+  return wage;
+}
