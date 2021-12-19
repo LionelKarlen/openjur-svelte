@@ -29,6 +29,7 @@
     "@types/page": "^1.11.5",
     "@typescript-eslint/eslint-plugin": "5.4.0",
     "autoprefixer": "^10.4.0",
+    "carbon-components-svelte": "^0.50.2",
     "cross-env": "7.0.3",
     "electron": "16.0.1",
     "electron-builder": "22.14.5",

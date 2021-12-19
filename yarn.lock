@@ -699,6 +699,13 @@ caniuse-lite@^1.0.30001272, caniuse-lite@^1.0.30001280:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001286.tgz#3e9debad420419618cfdf52dc9b6572b28a8fff6"
   integrity sha512-zaEMRH6xg8ESMi2eQ3R4eZ5qw/hJiVsO/HlLwniIwErij0JDr9P+8V4dtx1l+kLq6j3yy8l8W4fst1lBnat5wQ==
 
+carbon-components-svelte@^0.50.2:
+  version "0.50.2"
+  resolved "https://registry.yarnpkg.com/carbon-components-svelte/-/carbon-components-svelte-0.50.2.tgz#62c5b92ce4315f850517a5019bb21ab46e8ef283"
+  integrity sha512-tfJhv0ipQMkAZr2umt3t825OTfW+7Lk89OzTEZvsLJW0C/CXpa7umiplfKtwryXAyfZkVLHmR0fuvk3GC/vEJA==
+  dependencies:
+    flatpickr "4.6.9"
+
 caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
@@ -1496,6 +1503,11 @@ fill-range@^7.0.1:
   integrity sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==
   dependencies:
     to-regex-range "^5.0.1"
+
+flatpickr@4.6.9:
+  version "4.6.9"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.6.9.tgz#9a13383e8a6814bda5d232eae3fcdccb97dc1499"
+  integrity sha512-F0azNNi8foVWKSF+8X+ZJzz8r9sE1G4hl06RyceIaLvyltKvDl6vqk9Lm/6AUUCi5HWaIjiUbk7UpeE/fOXOpw==
 
 forever-agent@~0.6.1:
   version "0.6.1"
