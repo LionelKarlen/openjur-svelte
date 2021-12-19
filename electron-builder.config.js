@@ -3,6 +3,24 @@
  * @see https://www.electron.build/configuration/configuration
  */
 module.exports = {
+  appId: "org.suspiciouslycool.openjur",
+  productName: "OpenJUR",
+  win: {
+    target: "nsis",
+  },
+  linux: {
+    target: "AppImage",
+  },
+  nsis: {
+    allowToChangeInstallationDirectory: true,
+    oneClick: false,
+  },
+	extraResources: [
+		{
+			from: "res/test.sqlite",
+			to: "defaultFiles/test.sqlite"
+		}
+	],
   directories: {
     output: "dist",
     buildResources: "buildResources",

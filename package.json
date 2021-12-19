@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node scripts/build.js",
     "precompile": "cross-env MODE=production yarn build",
-    "compile": "electron-builder build --config electron-builder.config.js --dir --config.asar=false",
+    "compile": "electron-builder build --config electron-builder.config.js --config.asar=false",
     "compile:ci": "electron-builder build --config electron-builder.config.js --dir --config.asar=false --publish never",
     "pretest": "yarn build",
     "dev": "node scripts/watch.js",
