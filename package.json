@@ -1,12 +1,13 @@
 {
   "name": "openjur-svelte",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "packages/main/dist/index.cjs",
   "scripts": {
     "build": "node scripts/build.js",
     "precompile": "cross-env MODE=production yarn build",
-    "compile": "electron-builder build --config electron-builder.config.js --dir --config.asar=false",
+    "compile": "electron-builder build --config electron-builder.config.js --config.asar=false",
     "compile:ci": "electron-builder build --config electron-builder.config.js --dir --config.asar=false --publish never",
+	"compile:cd":"yarn precompile && yarn compile",
     "pretest": "yarn build",
     "dev": "node scripts/watch.js",
     "typecheck-main": "tsc --noEmit -p packages/main/tsconfig.json",
