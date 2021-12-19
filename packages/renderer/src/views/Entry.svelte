@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let id;
+  export let id: string;
 </script>
 
 <h1>Entry</h1>
