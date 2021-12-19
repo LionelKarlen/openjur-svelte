@@ -1,6 +1,9 @@
 node_modules
 .DS_Store
 dist
+./packages/main/dist
+./packages/preload/dist
+./packages/renderer/dist
 *.local
 thumbs.db
 

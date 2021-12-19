@@ -13,8 +13,8 @@
     "typecheck-preload": "tsc --noEmit -p packages/preload/tsconfig.json",
     "typecheck-renderer": "svelte-check --tsconfig packages/renderer/tsconfig.json",
     "check-types": "yarn typecheck-main && yarn typecheck-preload && yarn typecheck-renderer",
-    "check-format": "prettier --check --plugin-search-dir=. ./packages/**/*.{ts,svelte,css,js,cjs}",
-    "format": "prettier --write --plugin-search-dir=. ./packages/**/*.{ts,svelte,css,js,cjs}",
+    "check-format": "prettier --check --plugin-search-dir=. ./packages/**/*.{ts,svelte}",
+    "format": "prettier --write --plugin-search-dir=. ./packages/**/*.{ts,svelte}",
     "prepare": "husky install"
   },
   "browserslist": [
