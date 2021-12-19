@@ -15,6 +15,12 @@ module.exports = {
     allowToChangeInstallationDirectory: true,
     oneClick: false,
   },
+	extraResources: [
+		{
+			from: "res/test.sqlite",
+			to: "defaultFiles/test.sqlite"
+		}
+	],
   directories: {
     output: "dist",
     buildResources: "buildResources",

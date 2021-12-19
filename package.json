@@ -14,8 +14,8 @@
     "typecheck-preload": "tsc --noEmit -p packages/preload/tsconfig.json",
     "typecheck-renderer": "svelte-check --tsconfig packages/renderer/tsconfig.json",
     "check-types": "yarn typecheck-main && yarn typecheck-preload && yarn typecheck-renderer",
-    "check-format": "prettier --check --plugin-search-dir=. ./packages/**/*.{ts,svelte,css,js,cjs}",
-    "format": "prettier --write --plugin-search-dir=. ./packages/**/*.{ts,svelte,css,js,cjs}",
+    "check-format": "prettier --check --plugin-search-dir=. ./packages/**/*.{ts,svelte}",
+    "format": "prettier --write --plugin-search-dir=. ./packages/**/*.{ts,svelte}",
     "prepare": "husky install"
   },
   "browserslist": [
@@ -27,19 +27,29 @@
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
     "@tsconfig/svelte": "^2.0.1",
     "@types/electron-devtools-installer": "2.2.0",
+    "@types/page": "^1.11.5",
     "@typescript-eslint/eslint-plugin": "5.4.0",
+    "autoprefixer": "^10.4.0",
+    "carbon-components-svelte": "^0.50.2",
     "cross-env": "7.0.3",
     "electron": "16.0.1",
     "electron-builder": "22.14.5",
     "electron-devtools-installer": "3.2.0",
     "husky": "^7.0.0",
+    "postcss": "^8.4.4",
     "prettier": "^2.5.1",
     "prettier-plugin-svelte": "^2.5.1",
     "svelte": "^3.44.1",
     "svelte-check": "^2.2.8",
     "svelte-preprocess": "^4.9.8",
+    "tailwindcss": "^3.0.1",
     "tslib": "^2.3.1",
     "typescript": "4.5.2",
     "vite": "2.6.14"
+  },
+  "dependencies": {
+    "knex": "^0.95.14",
+    "page": "^1.11.6",
+    "sqlite3": "^5.0.2"
   }
 }

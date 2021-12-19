@@ -13,4 +13,6 @@ jobs:
       - name: Check Types
         run: yarn check-types
       - name: Build
+        run: yarn build
+      - name: Compile 
         run: yarn compile:ci

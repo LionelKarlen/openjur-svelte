@@ -5,13 +5,13 @@
     "paths": {
       "/@/*": [
         "./src/*"
-      ]
+      ],
+	  "/type/*":[
+		  "../../types/*"
+	  ]
     },
   },
-  "files": [
-    "src/index.ts"
-  ],
   "include": [
-    "../../types/**/*.d.ts"
+    "../../types/**/*.d.ts","src/**/*.ts"
   ]
 }
