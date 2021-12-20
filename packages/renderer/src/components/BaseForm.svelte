@@ -5,10 +5,16 @@
   const dispatch = createEventDispatcher();
 
   let submit: Function;
+  let isValid: boolean = false;
   export let form: typeof SvelteComponent;
 </script>
 
-<Form on:submit={() => submit()}>
-  <svelte:component this={form} bind:submit />
-  <FormButtons on:closeModal={() => dispatch("close")} />
+<Form
+  on:submit={() => {
+    submit();
+    dispatch("close");
+  }}
+>
+  <svelte:component this={form} bind:submit bind:isValid />
+  <FormButtons on:closeModal={() => dispatch("close")} bind:isValid />
 </Form>

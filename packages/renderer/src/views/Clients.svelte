@@ -43,7 +43,12 @@
     <Button on:click={() => (openModal = true)}>Add Client</Button>
   </Row>
 </Grid>
-<FormModal bind:open={openModal} heading="Add Client" form={ClientForm} />
+<FormModal
+  bind:open={openModal}
+  heading="Add Client"
+  form={ClientForm}
+  on:reloadData={() => getData()}
+/>
 {#if clients.length > 0}
   <StructuredList condensed selection>
     <StructuredListHead>
