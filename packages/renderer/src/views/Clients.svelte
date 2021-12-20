@@ -3,6 +3,9 @@
   import ipc from "../services/ipcService";
   import { onMount } from "svelte";
   import {
+    Button,
+    Grid,
+    Row,
     Search,
     StructuredList,
     StructuredListCell,
@@ -11,6 +14,8 @@
     StructuredListSkeleton,
   } from "carbon-components-svelte";
   import page from "page";
+  import FormModal from "../components/FormModal.svelte";
+  import ClientForm from "../components/ClientForm.svelte";
 
   let clients: Client[] = [];
   let filteredClients: Client[] = [];
@@ -27,10 +32,20 @@
     });
   }
   $: filterClients(searchValue);
+
+  let openModal = false;
 </script>
 
 <h1>Clients</h1>
-<Search bind:value={searchValue} />
+<Grid>
+  <Row>
+    <Search bind:value={searchValue} />
+    <Button on:click={() => (openModal = true)}>Add Client</Button>
+  </Row>
+</Grid>
+<FormModal bind:open={openModal} heading="Add Client">
+  <ClientForm slot="form" on:close={() => (openModal = false)} />
+</FormModal>
 {#if clients.length > 0}
   <StructuredList condensed selection>
     <StructuredListHead>
