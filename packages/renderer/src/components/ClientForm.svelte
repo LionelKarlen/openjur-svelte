@@ -1,22 +1,16 @@
 <script lang="ts">
-  import { Form, FormGroup, TextInput } from "carbon-components-svelte";
-  import { createEventDispatcher } from "svelte";
-  import FormButtons from "./FormButtons.svelte";
-  const dispatch = createEventDispatcher();
+  import { FormGroup, TextInput } from "carbon-components-svelte";
+  export const submit = () => {
+    console.log("client", text);
+  };
 
-  function submit() {
-    console.log("submit", text);
-  }
-  let text;
+  let text: string;
 </script>
 
-<Form on:submit={(e) => submit()}>
-  <FormGroup>
-    <TextInput
-      bind:value={text}
-      labelText="User name"
-      placeholder="Enter user name..."
-    />
-  </FormGroup>
-  <FormButtons on:closeModal={() => dispatch("close")} />
-</Form>
+<FormGroup>
+  <TextInput
+    bind:value={text}
+    labelText="User name"
+    placeholder="Enter user name..."
+  />
+</FormGroup>
