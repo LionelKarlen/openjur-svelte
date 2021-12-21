@@ -1,6 +1,7 @@
 <script lang="ts">
   import { FormGroup, NumberInput, TextInput } from "carbon-components-svelte";
-  import ipc from "../services/ipcService";
+  import { onMount } from "svelte";
+  import ipc from "../../services/ipcService";
   import type Client from "/type/database/Client";
   export const submit = () => {
     let client: Client = {
@@ -9,18 +10,23 @@
       city: city,
       country: country,
       zip: zip,
+      id: defaultClient.id != null ? defaultClient.id : null,
     };
     // TODO: Fix validate; it's behind by an action;
     if (isValid) {
       console.log("client", client);
-      ipc.invoke("addClient", client);
-      name = null;
-      address = null;
-      city = null;
-      country = null;
-      zip = 0;
-      isValid = false;
+      if (defaultClient.id != null) {
+        ipc.invoke("updateClient", client);
+      } else {
+        ipc.invoke("addClient", client);
+      }
     }
+    name = null;
+    address = null;
+    city = null;
+    country = null;
+    zip = 0;
+    isValid = false;
   };
 
   let name: string;
@@ -28,11 +34,27 @@
   let zip: number;
   let city: string;
   let country: string;
+  export let defaultClient: Client = {
+    address: null,
+    city: null,
+    country: null,
+    name: null,
+    zip: 0,
+    id: null,
+  };
+  onMount(() => {
+    if (defaultClient.id != null) {
+      name = defaultClient.name;
+      address = defaultClient.address;
+      zip = defaultClient.zip;
+      city = defaultClient.city;
+      country = defaultClient.country;
+    }
+    validate();
+  });
 
   export let isValid = false;
   function validate() {
-    console.log("validate");
-    console.log(name);
     if (name != null) {
       isValid =
         name.length > 0 &&
@@ -41,7 +63,6 @@
         country.length > 0;
     }
   }
-  $: console.log(isValid);
 </script>
 
 <div on:change={() => validate()}>

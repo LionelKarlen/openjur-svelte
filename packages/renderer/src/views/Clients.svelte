@@ -14,8 +14,8 @@
     StructuredListSkeleton,
   } from "carbon-components-svelte";
   import page from "page";
-  import FormModal from "../components/FormModal.svelte";
-  import ClientForm from "../components/ClientForm.svelte";
+  import FormModal from "../components/forms/FormModal.svelte";
+  import ClientForm from "../components/forms/ClientForm.svelte";
 
   let clients: Client[] = [];
   let filteredClients: Client[] = [];
