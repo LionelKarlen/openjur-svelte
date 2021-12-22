@@ -2,15 +2,21 @@
   import { onMount } from "svelte";
   import Address from "/@/components/Address.svelte";
   import ipc from "../services/ipcService";
+  import page from "page";
 
   import type Client from "/type/database/Client";
   import { Button, Column, Grid, Row } from "carbon-components-svelte";
   import FormModal from "../components/forms/FormModal.svelte";
   import ClientForm from "../components/forms/ClientForm.svelte";
+  import ClientDeleteForm from "../components/forms/ClientDeleteForm.svelte";
+
+  import Edit32 from "carbon-icons-svelte/lib/Edit32";
+  import Delete32 from "carbon-icons-svelte/lib/Delete32";
 
   export let id: string;
   let client: Client;
-  let openModal = false;
+  let openClientModal = false;
+  let openConfirmModal = false;
 
   onMount(() => getData(id));
   async function getData(id: string) {
@@ -21,13 +27,22 @@
 
 {#if client != null}
   <FormModal
-    bind:open={openModal}
+    bind:open={openClientModal}
     heading="Add Client"
     form={ClientForm}
     props={{
       defaultClient: client,
     }}
     on:reloadData={() => getData(id)}
+  />
+  <FormModal
+    bind:open={openConfirmModal}
+    heading="Confirm delete"
+    form={ClientDeleteForm}
+    props={{
+      obj: client,
+    }}
+    on:reloadData={() => page("/clients")}
   />
   <Grid>
     <Row style="padding: 1rem;">
@@ -40,7 +55,20 @@
           city={client.city}
         />
       </Column>
-      <Button on:click={() => (openModal = true)}>Edit</Button>
+      <Button
+        on:click={() => (openClientModal = true)}
+        iconDescription="Edit"
+        kind="ghost"
+        icon={Edit32}
+        style="margin-top: 2rem; margin-bottom: 2rem;"
+      />
+      <Button
+        on:click={() => (openConfirmModal = true)}
+        iconDescription="Delete"
+        kind="ghost"
+        icon={Delete32}
+        style="margin-top: 2rem; margin-bottom: 2rem;"
+      />
     </Row>
   </Grid>
 {:else}
