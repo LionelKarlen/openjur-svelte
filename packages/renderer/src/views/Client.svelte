@@ -9,14 +9,18 @@
   import FormModal from "../components/forms/FormModal.svelte";
   import ClientForm from "../components/forms/ClientForm.svelte";
   import ClientDeleteForm from "../components/forms/ClientDeleteForm.svelte";
+  import EntryForm from "../components/forms/EntryForm.svelte";
 
   import Edit32 from "carbon-icons-svelte/lib/Edit32";
   import Delete32 from "carbon-icons-svelte/lib/Delete32";
+  import type Entry from "/type/database/Entry";
 
   export let id: string;
   let client: Client;
+  let entry: Entry;
   let openClientModal = false;
   let openConfirmModal = false;
+  let openEntryModal = false;
 
   onMount(() => getData(id));
   async function getData(id: string) {
@@ -26,6 +30,15 @@
 </script>
 
 {#if client != null}
+  <FormModal
+    bind:open={openEntryModal}
+    heading="Add Entry"
+    form={EntryForm}
+    props={{
+      defaultEntry: entry,
+      id: id,
+    }}
+  />
   <FormModal
     bind:open={openClientModal}
     heading="Add Client"
@@ -55,6 +68,11 @@
           city={client.city}
         />
       </Column>
+      <Button
+        on:click={() => (openEntryModal = true)}
+        style="margin-top: 2rem; margin-bottom: 2rem;margin-right:2rem;padding-right: 15px;"
+        >New Entry</Button
+      >
       <Button
         on:click={() => (openClientModal = true)}
         iconDescription="Edit"

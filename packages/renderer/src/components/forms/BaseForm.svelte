@@ -15,6 +15,7 @@
     submit();
     dispatch("close");
   }}
+  novalidate={true}
 >
   <svelte:component this={form} bind:submit bind:isValid {...props} />
   <FormButtons on:closeModal={() => dispatch("close")} bind:isValid />
