@@ -5,7 +5,14 @@
   import page from "page";
 
   import type Client from "/type/database/Client";
-  import { Button, Column, Grid, Row } from "carbon-components-svelte";
+  import {
+    Button,
+    Column,
+    DataTable,
+    DataTableSkeleton,
+    Grid,
+    Row,
+  } from "carbon-components-svelte";
   import FormModal from "../components/forms/FormModal.svelte";
   import ClientForm from "../components/forms/ClientForm.svelte";
   import ClientDeleteForm from "../components/forms/ClientDeleteForm.svelte";
@@ -14,19 +21,70 @@
   import Edit32 from "carbon-icons-svelte/lib/Edit32";
   import Delete32 from "carbon-icons-svelte/lib/Delete32";
   import type Entry from "/type/database/Entry";
+  import { formatDate } from "../services/util";
+  import type { DataTableRow } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
+
+  let headers = [
+    {
+      key: "date",
+      value: "Date",
+    },
+    {
+      key: "clientID",
+      value: "Client",
+    },
+    {
+      key: "userID",
+      value: "User",
+    },
+    {
+      key: "text",
+      value: "Text",
+    },
+    {
+      key: "hours",
+      value: "Hours",
+    },
+    {
+      key: "amount",
+      value: "Amount",
+    },
+    {
+      key: "fixedAmount",
+      value: "FixedAmount",
+    },
+  ];
 
   export let id: string;
   let client: Client;
   let entry: Entry;
+  let entries: Entry[] = [];
   let openClientModal = false;
   let openConfirmModal = false;
   let openEntryModal = false;
+  let filteredEntries: DataTableRow[] = [];
 
   onMount(() => getData(id));
   async function getData(id: string) {
     client = await ipc.invoke("getClientByID", id);
+    entries = await ipc.invoke("getEntriesByClientID", id);
+    filteredEntries = [];
+    for (let i = 0; i < entries.length; i++) {
+      const value = entries[i];
+      filteredEntries.push({
+        id: value.id,
+        date: formatDate(value.date),
+        clientID: value.clientID,
+        userID: value.userID,
+        text: value.text,
+        hours: value.hours,
+        amount: value.amount,
+        fixedAmount: value.fixedAmount,
+      });
+    }
   }
   $: console.log(client);
+  $: console.log("entries", filteredEntries);
 </script>
 
 {#if client != null}
@@ -87,6 +145,15 @@
         icon={Delete32}
         style="margin-top: 2rem; margin-bottom: 2rem;"
       />
+    </Row>
+    <Row style="padding:0">
+      <Column style="padding:0">
+        {#if filteredEntries.length > 0}
+          <DataTable style="padding:0" {headers} rows={filteredEntries} />
+        {:else}
+          <DataTableSkeleton showHeader={true} showToolbar={false} />
+        {/if}
+      </Column>
     </Row>
   </Grid>
 {:else}
