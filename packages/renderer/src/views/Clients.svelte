@@ -14,8 +14,9 @@
     StructuredListSkeleton,
   } from "carbon-components-svelte";
   import page from "page";
-  import FormModal from "../components/FormModal.svelte";
-  import ClientForm from "../components/ClientForm.svelte";
+  import FormModal from "../components/forms/FormModal.svelte";
+  import ClientForm from "../components/forms/ClientForm.svelte";
+  import { sortAlphabetically } from "../services/util";
 
   let clients: Client[] = [];
   let filteredClients: Client[] = [];
@@ -24,11 +25,17 @@
   onMount(() => getData());
   async function getData() {
     clients = await ipc.invoke("getClients");
-    filteredClients = clients;
+    filterClients("");
   }
   function filterClients(search: string) {
     filteredClients = clients.filter((value: Client) => {
       return value.name.includes(search);
+    });
+    filteredClients.sort((a: Client, b: Client) => {
+      return sortAlphabetically(
+        a.name.split(" ")[a.name.split(" ").length - 1],
+        b.name.split(" ")[b.name.split(" ").length - 1]
+      );
     });
   }
   $: filterClients(searchValue);

@@ -6,6 +6,7 @@
   export let open = false;
   export let heading = "Heading";
   export let form: typeof SvelteComponent;
+  export let props: any = {};
 
   const dispatch = createEventDispatcher();
 
@@ -23,5 +24,5 @@
   passiveModal
   on:close={() => closeModal()}
 >
-  <BaseForm {form} on:close={() => closeModal()} />
+  <BaseForm {form} on:close={() => closeModal()} {props} />
 </Modal>
