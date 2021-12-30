@@ -30,11 +30,7 @@
       value: "Date",
     },
     {
-      key: "clientID",
-      value: "Client",
-    },
-    {
-      key: "userID",
+      key: "user",
       value: "User",
     },
     {
@@ -58,7 +54,6 @@
   export let id: string;
   let client: Client;
   let entry: Entry;
-  let entries: Entry[] = [];
   let openClientModal = false;
   let openConfirmModal = false;
   let openEntryModal = false;
@@ -67,21 +62,7 @@
   onMount(() => getData(id));
   async function getData(id: string) {
     client = await ipc.invoke("getClientByID", id);
-    entries = await ipc.invoke("getEntriesByClientID", id);
-    filteredEntries = [];
-    for (let i = 0; i < entries.length; i++) {
-      const value = entries[i];
-      filteredEntries.push({
-        id: value.id,
-        date: formatDate(value.date),
-        clientID: value.clientID,
-        userID: value.userID,
-        text: value.text,
-        hours: value.hours,
-        amount: value.amount,
-        fixedAmount: value.fixedAmount,
-      });
-    }
+    filteredEntries = await ipc.invoke("calculateTable", id);
   }
   $: console.log(client);
   $: console.log("entries", filteredEntries);
@@ -96,6 +77,7 @@
       defaultEntry: entry,
       id: id,
     }}
+    on:reloadData={() => getData(id)}
   />
   <FormModal
     bind:open={openClientModal}

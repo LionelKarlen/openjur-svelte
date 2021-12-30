@@ -8,8 +8,8 @@ export function sortAlphabetically(a: string, b: string) {
 }
 
 export function formatDate(date: number) {
-  //TODO: Implement
-  return date;
+  let d = new Date(date * 1000);
+  return `${d.getDay()}. ${d.getMonth() + 1}. ${d.getFullYear()}`;
 }
 
 export function simplifyDate(date: string) {

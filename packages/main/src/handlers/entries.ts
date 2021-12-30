@@ -3,11 +3,18 @@ import { Knex } from "knex";
 import type id from "../../../../types/util/Id";
 import type Entry from "/type/database/Entry";
 import Util from "../util";
+import { formatDate } from "../../../renderer/src/services/util";
+import { getClientByID } from "./clients";
+import { getUserByID } from "./users";
 const collection = "entries";
 
 export default function registerEntryHandlers(knexClient: Knex) {
   ipcMain.handle("getEntries", async (event, data) => {
     return await getEntries(knexClient);
+  });
+
+  ipcMain.handle("calculateTable", async (event, data: id) => {
+    return await calculateTable(knexClient, data);
   });
 
   ipcMain.handle("getEntriesByClientID", async (event, data: id) => {
@@ -100,4 +107,29 @@ export async function deleteEntry(knexClient: Knex, id: id) {
       id: `${id}`,
     })
     .delete();
+}
+
+export async function calculateTable(knexClient: Knex, id: id, isUser = false) {
+  let filtered = [];
+  let data = isUser
+    ? await getEntriesByUserID(knexClient, id)
+    : await getEntriesByClientID(knexClient, id);
+  console.log("data", data);
+  for (const value of data) {
+    let client = await getClientByID(knexClient, value.clientID);
+    let user = await getUserByID(knexClient, value.userID);
+    console.log("user", user);
+    filtered.push({
+      id: value.id,
+      date: formatDate(value.date),
+      client: client.name,
+      user: user.name,
+      text: value.text,
+      hours: value.hours,
+      amount: user.baseWage * value.hours,
+      fixedAmount: value.fixedAmount ? value.fixedAmount : "N/A",
+    });
+  }
+  console.log("filtered", filtered);
+  return filtered;
 }
