@@ -21,7 +21,6 @@
   import Edit32 from "carbon-icons-svelte/lib/Edit32";
   import Delete32 from "carbon-icons-svelte/lib/Delete32";
   import type Entry from "/type/database/Entry";
-  import { formatDate } from "../services/util";
   import type { DataTableRow } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
 
   let headers = [
