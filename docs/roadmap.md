@@ -1,4 +1,4 @@
-# 0.3.0
+# 0.4.0
 
 ### Features
 
@@ -14,7 +14,7 @@
 - fix entry form spacer
 - set default date in entry form
 
-# 0.4.0
+# 0.5.0
 
 ### Features
 
@@ -27,7 +27,7 @@
 
 - fix entry ui on empty entries
 
-# 0.5.0
+# 0.6.0
 
 ### Features
 
