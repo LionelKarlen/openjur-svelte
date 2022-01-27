@@ -137,6 +137,8 @@
   <FormGroup>
     <TextInput bind:value={text} labelText="Text" placeholder="Research" />
     <NumberInput bind:value={hours} hideSteppers label="Hours" />
+  </FormGroup>
+  <FormGroup>
     <Toggle bind:toggled={isFixed} labelText="Fixed Amount" />
   </FormGroup>
   {#if isFixed}
