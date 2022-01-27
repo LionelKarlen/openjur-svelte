@@ -11,6 +11,8 @@ import { formatDate } from "../../../renderer/src/services/util";
 import QRData from "../../../../types/export/QRdata";
 import Creditor from "/type/util/Creditor";
 import Debtor from "../../../../types/util/Debtor";
+import { settings } from "../index";
+import registerEntryHandlers from "./entries";
 
 export default function registerExportHandlers(knexClient: Knex) {
   ipcMain.handle("exportTable", async (event, data: ExportParams) => {
@@ -56,9 +58,19 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
     ? await getUserByID(knexClient, params.id)
     : await getClientByID(knexClient, params.id);
   let date = new Date(Date.now()).getTime() / 1000;
-  let invoiceID = `${new Date(date * 1000).getFullYear()}`; //TODO: Add running invoice count from settings
+  await settings.read();
+  let year = new Date(date * 1000).getFullYear();
+
+  // Reset the runningInvoiceID if the year changes.
+  if (year != settings.data!.runningYear) {
+    settings.data!.runningYear = year;
+    settings.data!.runningInvoiceID = 0;
+  }
+
+  let invoiceID = `${settings.data?.runningInvoiceID}${year}`;
+  settings.data!.runningInvoiceID += 1;
+  settings.write(); //FIXME: Move this to after the file export function
   let mwst = 7.7;
-  //FIXME: Add current year to settings to enable resetting the running count.
   let subTotal = chargeTotal + hoursTotal;
   let mwstTotal = Util.safeRound(subTotal * (mwst / 100), 1);
   let total = subTotal + mwstTotal;
