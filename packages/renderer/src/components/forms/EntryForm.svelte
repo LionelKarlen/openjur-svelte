@@ -10,7 +10,7 @@
   } from "carbon-components-svelte";
   import { onMount } from "svelte";
   import ipc from "/@/services/ipcService";
-  import { simplifyDate } from "/@/services/util";
+  import { formatDate, simplifyDate } from "/@/services/util";
   import type Client from "/type/database/Client";
 
   import type Entry from "/type/database/Entry";
@@ -72,7 +72,7 @@
 
   onMount(async () => {
     if (defaultEntry.id != null) {
-      // date=formatDate(defaultEntry.date);
+      date = formatDate(defaultEntry.date);
       clientID = defaultEntry.clientID;
       hours = defaultEntry.hours;
       text = defaultEntry.text;
@@ -82,6 +82,7 @@
     }
     clients = await ipc.invoke("getClients");
     users = await ipc.invoke("getUsers");
+    date = formatDate(Date.now() / 1000);
     clients.map((value: Client, i: number) => {
       if (value.id == id) {
         selectedClientIndex = i;
