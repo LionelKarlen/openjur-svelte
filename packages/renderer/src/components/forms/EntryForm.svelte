@@ -62,7 +62,7 @@
 
     isValid =
       clientID != null &&
-      date != null &&
+      date.length > 0 &&
       hours >= 0 &&
       userID != null &&
       text != "" &&
