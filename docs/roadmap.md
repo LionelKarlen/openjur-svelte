@@ -3,7 +3,7 @@
 ### Features
 
 - add settings
-- add autocomplete component
+- ~~add autocomplete component~~
 - add file export
 
 ### Bug Fixes

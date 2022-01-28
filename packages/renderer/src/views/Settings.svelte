@@ -1,10 +1,7 @@
 <script lang="ts">
-  import router from "page";
-  function handleclick() {
-    router("/entries");
-    console.log("test");
-  }
+  import Autocomplete from "../components/Autocomplete.svelte";
 </script>
 
 <h1>Settings</h1>
-<p on:click={handleclick}>test</p>
+
+<Autocomplete suggestions={["asdf", "asdfasdfsad"]} />
