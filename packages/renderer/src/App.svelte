@@ -2,38 +2,20 @@
   import "./tailwind.css";
   import Router from "/@/components/Router.svelte";
   import {
-    Tabs,
-    Tab,
     Header,
     SkipToContent,
     HeaderNav,
     HeaderNavItem,
-    HeaderNavMenu,
-    SideNav,
-    SideNavItems,
-    SideNavLink,
-    SideNavMenu,
-    SideNavMenuItem,
-    SideNavDivider,
     Content,
     Grid,
-    Table,
     HeaderUtilities,
-    HeaderGlobalAction,
     HeaderAction,
     HeaderPanelDivider,
     HeaderPanelLink,
     HeaderPanelLinks,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/g10.css";
-  import page from "page";
-  import {
-    Close20,
-    Fade16,
-    Menu20,
-    SettingsAdjust20,
-    UserAvatarFilledAlt20,
-  } from "carbon-icons-svelte";
+  import { Close20, Menu20 } from "carbon-icons-svelte";
 
   let tabs = [
     {
@@ -54,12 +36,6 @@
 </script>
 
 <main class="bg-background h-screen">
-  <!-- <Tabs triggerHref="/">
-    {#each tabs as tab}
-      <Tab label={tab.label} on:click={() => page(tab.name)} />
-    {/each}
-  </Tabs -->
-  >
   <Header platformName="OpenJUR" bind:isSideNavOpen>
     <svelte:fragment slot="skip-to-content">
       <SkipToContent />
