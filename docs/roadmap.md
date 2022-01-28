@@ -8,11 +8,11 @@
 
 ### Bug Fixes
 
-- update navigation
+- ~~update navigation~~
 - fix export form
-- fix entry form validity
-- fix entry form spacer
-- set default date in entry form
+- ~~fix entry form validity~~
+- ~~fix entry form spacer~~
+- ~~set default date in entry form~~
 
 # 0.5.0
 
