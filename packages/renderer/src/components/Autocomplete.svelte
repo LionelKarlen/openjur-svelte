@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ClickableTile, Popover, Search } from "carbon-components-svelte";
 
-  let value = "";
+  export let value = "";
   export let suggestions = [];
   function filter(filter: string) {
     filtered = suggestions.filter((val) => val.includes(filter));

@@ -8,6 +8,7 @@
   let isValid: boolean = false;
   export let form: typeof SvelteComponent;
   export let props: any;
+  export let isModal = true;
 </script>
 
 <Form
@@ -18,5 +19,5 @@
   novalidate={true}
 >
   <svelte:component this={form} bind:submit bind:isValid {...props} />
-  <FormButtons on:closeModal={() => dispatch("close")} bind:isValid />
+  <FormButtons on:closeModal={() => dispatch("close")} bind:isValid {isModal} />
 </Form>
