@@ -7,19 +7,51 @@
   } from "carbon-components-svelte";
   import { onMount } from "svelte";
   import Suggestion from "../Suggestion.svelte";
+  import ipc from "/@/services/ipcService";
+  import path from "/@/services/path";
   import type Settings from "/type/database/Settings";
 
-  export function submit() {
-    // let settings: Settings = {
-    // };
-  }
+  let settings: Settings;
+  export const submit = () => {
+    let obj: Settings = {
+      MWST: mwst,
+      clientTemplatePath: clientTemplateFiles[0].path,
+      userTemplatePath: userTemplateFiles[0].path,
+      entryTextSuggestions: entryTextSuggestions,
+      fixcostTextSuggestions: fixcostTextSuggestions,
+      address: address,
+      zip: zip,
+      city: city,
+      country: country,
+      IBAN: iban,
+      runningYear: settings.runningYear,
+      runningInvoiceID: settings.runningInvoiceID,
+    };
+    console.log(obj);
+    ipc.invoke("setSettings", obj);
+  };
 
-  onMount(() => {
-    let settings: Settings;
+  onMount(async () => {
+    settings = await ipc.invoke("getSettings");
+    console.log("settings", settings);
     if (settings) {
       mwst = settings.MWST;
-      clientTemplateFiles = [settings.clientTemplatePath];
-      userTemplateFiles = [settings.userTemplatePath];
+      clientTemplateFiles = settings.clientTemplatePath
+        ? [
+            {
+              path: settings.clientTemplatePath,
+              name: path.basename(settings.clientTemplatePath),
+            },
+          ]
+        : [];
+      userTemplateFiles = settings.userTemplatePath
+        ? [
+            {
+              path: settings.userTemplatePath,
+              name: path.basename(settings.userTemplatePath),
+            },
+          ]
+        : [];
       entryTextSuggestions = settings.entryTextSuggestions;
       fixcostTextSuggestions = settings.fixcostTextSuggestions;
       address = settings.address;
@@ -78,13 +110,13 @@
   <FormGroup>
     <Suggestion
       labelText="Entry text suggestions"
-      suggestions={entryTextSuggestions}
+      bind:suggestions={entryTextSuggestions}
     />
   </FormGroup>
   <FormGroup>
     <Suggestion
       labelText="Fixcost text suggestions"
-      suggestions={fixcostTextSuggestions}
+      bind:suggestions={fixcostTextSuggestions}
     />
   </FormGroup>
 

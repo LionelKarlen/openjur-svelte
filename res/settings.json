@@ -1,14 +1,19 @@
 {
   "MWST": 7.7,
-  "clientTemplatePath": "",
-  "userTemplatePath": "",
-  "entryTextSuggestions": [],
-  "fixcostTextSuggestions": [],
-  "IBAN": "",
+  "clientTemplatePath": "/home/lionel/Documents/io plan lionel karlen.docx",
+  "userTemplatePath": "/home/lionel/Documents/essay.odt",
+  "entryTextSuggestions": [
+    "adsfadsf"
+  ],
+  "fixcostTextSuggestions": [
+    "lkhglihkgkökljn",
+    "jkhghjkghghkpöjhoiuphu"
+  ],
+  "address": "asdfasdf",
+  "zip": 123,
+  "city": "asdfsad",
+  "country": "sadfsda",
+  "IBAN": "sadfadsf",
   "runningYear": 2022,
-  "runningInvoiceID": 2,
-  "address": "",
-  "zip": 0,
-  "city": "",
-  "country": ""
+  "runningInvoiceID": 2
 }

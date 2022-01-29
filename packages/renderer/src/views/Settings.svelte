@@ -6,6 +6,4 @@
 
 <h1>Settings</h1>
 
-<Autocomplete suggestions={["asdf", "asdfasdfsad"]} />
-
 <BaseForm form={SettingsForm} props={{}} isModal={false} />
