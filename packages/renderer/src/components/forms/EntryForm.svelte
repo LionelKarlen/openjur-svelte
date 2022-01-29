@@ -9,6 +9,7 @@
     Toggle,
   } from "carbon-components-svelte";
   import { onMount } from "svelte";
+  import Autocomplete from "../Autocomplete.svelte";
   import ipc from "/@/services/ipcService";
   import { formatDate, simplifyDate } from "/@/services/util";
   import type Client from "/type/database/Client";
@@ -80,6 +81,8 @@
       fixedAmount = defaultEntry.fixedAmount;
       isFixed = defaultEntry.fixedAmount > 0;
     }
+    let settings = await ipc.invoke("getSettings");
+    entryTextSuggestions = settings.entryTextSuggestions;
     clients = await ipc.invoke("getClients");
     users = await ipc.invoke("getUsers");
     date = formatDate(Date.now() / 1000);
@@ -90,6 +93,8 @@
     });
   });
   $: console.log(selectedClientIndex);
+
+  let entryTextSuggestions = [];
 
   let clientID: string;
   let date: string;
@@ -106,6 +111,7 @@
     userID: null,
     fixedAmount: null,
   };
+  $: console.log(text);
 </script>
 
 <div on:change={() => validate()}>
@@ -136,7 +142,12 @@
     />
   </FormGroup>
   <FormGroup>
-    <TextInput bind:value={text} labelText="Text" placeholder="Research" />
+    <Autocomplete
+      bind:value={text}
+      labelText="Text"
+      suggestions={entryTextSuggestions}
+      placeholder="research"
+    />
     <NumberInput bind:value={hours} hideSteppers label="Hours" />
   </FormGroup>
   <FormGroup>
