@@ -2,7 +2,7 @@
 
 ### Features
 
-- add settings
+- ~~add settings~~
 - ~~add autocomplete component~~
 - add file export
 
@@ -13,6 +13,8 @@
 - ~~fix entry form validity~~
 - ~~fix entry form spacer~~
 - ~~set default date in entry form~~
+- fix overlap in autocomplete
+- fix text recognition in autcomplete
 
 # 0.5.0
 
