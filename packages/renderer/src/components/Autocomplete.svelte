@@ -1,44 +1,31 @@
 <script lang="ts">
-  import { ClickableTile, Popover, TextInput } from "carbon-components-svelte";
+  import { ComboBox } from "carbon-components-svelte";
+  import type { ComboBoxItem } from "carbon-components-svelte/types/ComboBox/ComboBox.svelte";
 
   export let value = "";
   export let labelText = "";
   export let placeholder = "";
   export let suggestions = [];
-  function filter(filter: string) {
-    filtered = suggestions.filter((val) => val.includes(filter));
-  }
 
-  $: filter(value);
-  let isopen = false;
-  let filtered = [];
+  function update(item: ComboBoxItem, val: string) {
+    if (!val) return true;
+    return item.text.toLowerCase().includes(val.toLowerCase());
+  }
 </script>
 
 <div>
-  <TextInput
+  <ComboBox
+    shouldFilterItem={update}
+    titleText={labelText}
     {placeholder}
-    {labelText}
     bind:value
-    on:focus={() => (isopen = true)}
-    on:blur={() => (isopen = false)}
+    items={suggestions.map((v, i) => {
+      return {
+        id: i.toString(),
+        text: v,
+      };
+    })}
   />
-  {#if filtered.length > 0}
-    <Popover
-      bind:open={isopen}
-      relative
-      style="max-height: 15rem; overflow-y: scroll;"
-    >
-      {#each filtered as i}
-        <ClickableTile
-          style="max-height: 3rem; min-height:3rem"
-          on:click={() => {
-            value = i;
-            isopen = false;
-          }}>{i}</ClickableTile
-        >
-      {/each}
-    </Popover>
-  {/if}
 </div>
 
 <style>
