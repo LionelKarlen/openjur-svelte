@@ -13,8 +13,8 @@
 - ~~fix entry form validity~~
 - ~~fix entry form spacer~~
 - ~~set default date in entry form~~
-- fix overlap in autocomplete
-- fix text recognition in autcomplete
+- ~~fix overlap in autocomplete~~
+- ~~fix text recognition in autcomplete~~
 
 # 0.5.0
 
