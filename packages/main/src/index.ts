@@ -7,7 +7,7 @@ import { JSONFile, Low } from "lowdb";
 import Settings from "../../../types/database/Settings";
 
 const isSingleInstance = app.requestSingleInstanceLock();
-const isDevelopment = import.meta.env.MODE === "development";
+export const isDevelopment = import.meta.env.MODE === "development";
 
 if (!isSingleInstance) {
   app.quit();

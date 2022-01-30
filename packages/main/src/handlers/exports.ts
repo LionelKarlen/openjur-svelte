@@ -11,8 +11,9 @@ import { formatDate } from "../../../renderer/src/services/util";
 import QRData from "../../../../types/export/QRdata";
 import Creditor from "/type/util/Creditor";
 import Debtor from "../../../../types/util/Debtor";
-import { settings } from "../index";
-import registerEntryHandlers from "./entries";
+import { settings, isDevelopment } from "../index";
+import * as path from "path";
+import { writeToFile } from "./file";
 
 export default function registerExportHandlers(knexClient: Knex) {
   ipcMain.handle("exportTable", async (event, data: ExportParams) => {
@@ -69,7 +70,6 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
 
   let invoiceID = `${settings.data?.runningInvoiceID}${year}`;
   settings.data!.runningInvoiceID += 1;
-  settings.write(); //FIXME: Move this to after the file export function
   let mwst = 7.7;
   let subTotal = chargeTotal + hoursTotal;
   let mwstTotal = Util.safeRound(subTotal * (mwst / 100), 1);
@@ -104,4 +104,29 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
     debtor: exportDebtor,
   };
   console.log("qrExport", qrObject);
+  let exportPath = !isDevelopment
+    ? `${path.join(process.resourcesPath, "export", invoiceID)}`
+    : `${path.join(
+        process.resourcesPath,
+        "..",
+        "..",
+        "..",
+        "..",
+        "res",
+        "export",
+        invoiceID
+      )}`;
+  console.log("exportPath", exportPath);
+  let success = await writeToFile(
+    exportObject,
+    qrObject,
+    settings.data!,
+    exportPath,
+    false
+  );
+  if (success) {
+    settings.write();
+    // TODO: Add invoice object
+    // TODO: Update InvoiceID in entries
+  }
 }
