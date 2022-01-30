@@ -4,7 +4,11 @@
 
 - ~~add settings~~
 - ~~add autocomplete component~~
-- add file export
+- ~~add file export~~
+- add invoice reference
+- add invoice objects
+- add pdf export
+- open files after export
 
 ### Bug Fixes
 
