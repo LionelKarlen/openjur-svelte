@@ -49,6 +49,10 @@
       key: "fixedAmount",
       value: "FixedAmount",
     },
+    {
+      key: "invoiceID",
+      value: "InvoiceID",
+    },
   ];
 
   export let id: string;

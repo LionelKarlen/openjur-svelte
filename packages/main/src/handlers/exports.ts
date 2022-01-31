@@ -2,7 +2,7 @@ import { ipcMain } from "electron";
 import { Knex } from "knex";
 import type ExportParams from "/type/util/ExportParams";
 import Entry from "/type/database/Entry";
-import { calculateTable } from "./entries";
+import { calculateTable, updateEntry } from "./entries";
 import { getClientByID } from "./clients";
 import { getUserByID } from "./users";
 import Util from "../util";
@@ -14,6 +14,8 @@ import Debtor from "../../../../types/util/Debtor";
 import { settings, isDevelopment } from "../index";
 import * as path from "path";
 import { writeToFile } from "./file";
+import Invoice from "../../../../types/database/Invoice";
+import { addInvoice } from "./invoices";
 
 export default function registerExportHandlers(knexClient: Knex) {
   ipcMain.handle("exportTable", async (event, data: ExportParams) => {
@@ -127,6 +129,22 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
   if (success) {
     settings.write();
     // TODO: Add invoice object
+    let invoiceObject: Invoice = {
+      amount: exportObject.total,
+      extRef: invoiceID,
+      path: exportPath,
+      clientID: debtor.id,
+      id: invoiceID,
+    };
+    await addInvoice(knexClient, invoiceObject);
+
     // TODO: Update InvoiceID in entries
+    for (let entry of initialEntries) {
+      let updatedEntry = {
+        ...entry,
+        invoiceID: invoiceID,
+      };
+      await updateEntry(knexClient, updatedEntry);
+    }
   }
 }

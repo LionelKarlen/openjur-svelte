@@ -66,13 +66,8 @@ export async function getInvoicesByUserID(
   return Invoice;
 }
 
-export async function addInvoice(knexClient: Knex, Invoice: Invoice) {
-  let id = Util.generateID();
-  let exportInvoice: Invoice = {
-    ...Invoice,
-    id: id,
-  };
-  await knexClient.table(collection).insert(exportInvoice);
+export async function addInvoice(knexClient: Knex, invoice: Invoice) {
+  await knexClient.table(collection).insert(invoice);
 }
 
 export async function deleteInvoice(knexClient: Knex, id: id) {

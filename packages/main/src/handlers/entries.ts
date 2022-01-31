@@ -129,6 +129,7 @@ export async function calculateTable(knexClient: Knex, entries: Entry[]) {
       user: user.name,
       text: value.text,
       hours: value.hours,
+      invoiceID: value.invoiceID ? value.invoiceID : "N/A",
       amount: user.baseWage * value.hours,
       fixedAmount: value.fixedAmount ? value.fixedAmount : "N/A",
     });
