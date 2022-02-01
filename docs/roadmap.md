@@ -7,13 +7,12 @@
 - ~~add file export~~
 - ~~add invoice reference~~
 - ~~add invoice objects~~
-- add pdf export
 - ~~open files after export~~
 
 ### Bug Fixes
 
 - ~~update navigation~~
-- fix export form
+- ~~fix export form~~
 - ~~fix entry form validity~~
 - ~~fix entry form spacer~~
 - ~~set default date in entry form~~
@@ -32,6 +31,7 @@
 ### Bug Fixes
 
 - fix entry ui on empty entries
+- fix pdfkit export (@cache decorator)
 
 # 0.6.0
 

@@ -30,15 +30,36 @@
   $: console.log(fromDate);
 </script>
 
-<div on:change={() => validate()} style="height:50vh">
+<div on:change={() => validate()} style="height: 40vh">
   <DatePicker
     datePickerType="range"
     flatpickrProps={{ static: true }}
     dateFormat="d. m. Y"
     bind:valueFrom={fromDate}
     bind:valueTo={toDate}
+    style="width:100%"
   >
-    <DatePickerInput labelText="From" placeholder="mm. dd. yyyy" />
-    <DatePickerInput labelText="To" placeholder="mm. dd. yyyy" />
+    <DatePickerInput
+      labelText="From"
+      placeholder="mm. dd. yyyy"
+      style="width:100%"
+    />
+    <DatePickerInput
+      labelText="To"
+      placeholder="mm. dd. yyyy"
+      style="width:100%"
+    />
   </DatePicker>
 </div>
+
+<style>
+  :global(.bx--date-picker--range) {
+    width: 100%;
+  }
+  :global(.bx--date-picker-container) {
+    width: 50% !important;
+  }
+  :global(.flatpickr-wrapper) {
+    width: 100%;
+  }
+</style>
