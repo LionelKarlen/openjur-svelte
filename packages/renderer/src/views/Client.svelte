@@ -22,6 +22,7 @@
   import Delete32 from "carbon-icons-svelte/lib/Delete32";
   import type Entry from "/type/database/Entry";
   import type { DataTableRow } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
+  import ExportForm from "../components/forms/ExportForm.svelte";
 
   let headers = [
     {
@@ -48,6 +49,10 @@
       key: "fixedAmount",
       value: "FixedAmount",
     },
+    {
+      key: "invoiceID",
+      value: "InvoiceID",
+    },
   ];
 
   export let id: string;
@@ -56,12 +61,16 @@
   let openClientModal = false;
   let openConfirmModal = false;
   let openEntryModal = false;
+  let openExportModal = false;
   let filteredEntries: DataTableRow[] = [];
 
   onMount(() => getData(id));
   async function getData(id: string) {
     client = await ipc.invoke("getClientByID", id);
-    filteredEntries = await ipc.invoke("calculateTable", id);
+    filteredEntries = await ipc.invoke("calculateTable", {
+      id: id,
+      false: false,
+    });
   }
   $: console.log(client);
   $: console.log("entries", filteredEntries);
@@ -84,6 +93,16 @@
     form={ClientForm}
     props={{
       defaultClient: client,
+    }}
+    on:reloadData={() => getData(id)}
+  />
+  <FormModal
+    bind:open={openExportModal}
+    heading="Export to File"
+    form={ExportForm}
+    props={{
+      id: id,
+      isUser: false,
     }}
     on:reloadData={() => getData(id)}
   />
@@ -134,6 +153,7 @@
         {:else}
           <DataTableSkeleton showHeader={true} showToolbar={false} />
         {/if}
+        <Button on:click={() => (openExportModal = true)}>Export</Button>
       </Column>
     </Row>
   </Grid>

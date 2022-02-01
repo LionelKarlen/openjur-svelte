@@ -1,6 +1,6 @@
 {
   "name": "openjur-svelte",
-  "version": "0.0.3",
+  "version": "0.4.0",
   "main": "packages/main/dist/index.cjs",
   "scripts": {
     "build": "node scripts/build.js",
@@ -49,8 +49,13 @@
     "vite": "2.6.14"
   },
   "dependencies": {
+    "@types/pizzip": "^3.0.2",
+    "docxtemplater": "^3.28.6",
     "knex": "^0.95.14",
+    "lowdb": "^3.0.0",
     "page": "^1.11.6",
-    "sqlite3": "^5.0.2"
+    "pizzip": "^3.1.1",
+    "sqlite3": "^5.0.2",
+    "swissqrbill": "^3.1.4"
   }
 }

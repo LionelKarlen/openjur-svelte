@@ -1,9 +1,21 @@
 <script lang="ts">
   import "./tailwind.css";
   import Router from "/@/components/Router.svelte";
-  import { Tabs, Tab } from "carbon-components-svelte";
+  import {
+    Header,
+    SkipToContent,
+    HeaderNav,
+    HeaderNavItem,
+    Content,
+    Grid,
+    HeaderUtilities,
+    HeaderAction,
+    HeaderPanelDivider,
+    HeaderPanelLink,
+    HeaderPanelLinks,
+  } from "carbon-components-svelte";
   import "carbon-components-svelte/css/g10.css";
-  import page from "page";
+  import { Close20, Menu20 } from "carbon-icons-svelte";
 
   let tabs = [
     {
@@ -19,13 +31,39 @@
       name: "/entries",
     },
   ];
+
+  let isSideNavOpen = false;
 </script>
 
 <main class="bg-background h-screen">
-  <Tabs triggerHref="/">
-    {#each tabs as tab}
-      <Tab label={tab.label} on:click={() => page(tab.name)} />
-    {/each}
-  </Tabs>
-  <Router />
+  <Header platformName="OpenJUR" bind:isSideNavOpen>
+    <svelte:fragment slot="skip-to-content">
+      <SkipToContent />
+    </svelte:fragment>
+    <HeaderNav>
+      {#each tabs as tab}
+        <HeaderNavItem href={tab.name} text={tab.label} />
+      {/each}
+    </HeaderNav>
+    <HeaderUtilities>
+      <HeaderAction
+        bind:isOpen={isSideNavOpen}
+        icon={Menu20}
+        closeIcon={Close20}
+      >
+        <HeaderPanelLinks>
+          {#each tabs as tab}
+            <HeaderPanelLink href={tab.name}>{tab.label}</HeaderPanelLink>
+          {/each}
+          <HeaderPanelDivider />
+          <HeaderPanelLink href="/">Settings</HeaderPanelLink>
+        </HeaderPanelLinks>
+      </HeaderAction>
+    </HeaderUtilities>
+  </Header>
+  <Content>
+    <Grid>
+      <Router />
+    </Grid>
+  </Content>
 </main>

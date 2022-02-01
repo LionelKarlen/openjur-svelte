@@ -13,9 +13,15 @@ export default function registerEntryHandlers(knexClient: Knex) {
     return await getEntries(knexClient);
   });
 
-  ipcMain.handle("calculateTable", async (event, data: id) => {
-    return await calculateTable(knexClient, data);
-  });
+  ipcMain.handle(
+    "calculateTable",
+    async (event, data: { id: id; isUser: boolean }) => {
+      let entries = data.isUser
+        ? await getEntriesByUserID(knexClient, data.id)
+        : await getEntriesByClientID(knexClient, data.id);
+      return await calculateTable(knexClient, entries);
+    }
+  );
 
   ipcMain.handle("getEntriesByClientID", async (event, data: id) => {
     return await getEntriesByClientID(knexClient, data);
@@ -109,13 +115,10 @@ export async function deleteEntry(knexClient: Knex, id: id) {
     .delete();
 }
 
-export async function calculateTable(knexClient: Knex, id: id, isUser = false) {
+export async function calculateTable(knexClient: Knex, entries: Entry[]) {
   let filtered = [];
-  let data = isUser
-    ? await getEntriesByUserID(knexClient, id)
-    : await getEntriesByClientID(knexClient, id);
-  console.log("data", data);
-  for (const value of data) {
+  console.log("data", entries);
+  for (const value of entries) {
     let client = await getClientByID(knexClient, value.clientID);
     let user = await getUserByID(knexClient, value.userID);
     console.log("user", user);
@@ -126,6 +129,7 @@ export async function calculateTable(knexClient: Knex, id: id, isUser = false) {
       user: user.name,
       text: value.text,
       hours: value.hours,
+      invoiceID: value.invoiceID ? value.invoiceID : "N/A",
       amount: user.baseWage * value.hours,
       fixedAmount: value.fixedAmount ? value.fixedAmount : "N/A",
     });

@@ -4,6 +4,7 @@ dist
 ./packages/main/dist
 ./packages/preload/dist
 ./packages/renderer/dist
+/res/export/*.docx
 *.local
 thumbs.db
 

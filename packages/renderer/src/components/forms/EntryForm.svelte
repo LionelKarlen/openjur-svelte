@@ -9,8 +9,9 @@
     Toggle,
   } from "carbon-components-svelte";
   import { onMount } from "svelte";
+  import Autocomplete from "../Autocomplete.svelte";
   import ipc from "/@/services/ipcService";
-  import { simplifyDate } from "/@/services/util";
+  import { formatDate, simplifyDate } from "/@/services/util";
   import type Client from "/type/database/Client";
 
   import type Entry from "/type/database/Entry";
@@ -62,7 +63,7 @@
 
     isValid =
       clientID != null &&
-      date != null &&
+      date.length > 0 &&
       hours >= 0 &&
       userID != null &&
       text != "" &&
@@ -72,7 +73,7 @@
 
   onMount(async () => {
     if (defaultEntry.id != null) {
-      // date=formatDate(defaultEntry.date);
+      date = formatDate(defaultEntry.date);
       clientID = defaultEntry.clientID;
       hours = defaultEntry.hours;
       text = defaultEntry.text;
@@ -80,8 +81,11 @@
       fixedAmount = defaultEntry.fixedAmount;
       isFixed = defaultEntry.fixedAmount > 0;
     }
+    let settings = await ipc.invoke("getSettings");
+    entryTextSuggestions = settings.entryTextSuggestions;
     clients = await ipc.invoke("getClients");
     users = await ipc.invoke("getUsers");
+    date = formatDate(Date.now() / 1000);
     clients.map((value: Client, i: number) => {
       if (value.id == id) {
         selectedClientIndex = i;
@@ -89,6 +93,8 @@
     });
   });
   $: console.log(selectedClientIndex);
+
+  let entryTextSuggestions = [];
 
   let clientID: string;
   let date: string;
@@ -105,6 +111,7 @@
     userID: null,
     fixedAmount: null,
   };
+  $: console.log(text);
 </script>
 
 <div on:change={() => validate()}>
@@ -135,8 +142,15 @@
     />
   </FormGroup>
   <FormGroup>
-    <TextInput bind:value={text} labelText="Text" placeholder="Research" />
+    <Autocomplete
+      bind:value={text}
+      labelText="Text"
+      suggestions={entryTextSuggestions}
+      placeholder="research"
+    />
     <NumberInput bind:value={hours} hideSteppers label="Hours" />
+  </FormGroup>
+  <FormGroup>
     <Toggle bind:toggled={isFixed} labelText="Fixed Amount" />
   </FormGroup>
   {#if isFixed}

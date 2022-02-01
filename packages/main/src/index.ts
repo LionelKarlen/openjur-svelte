@@ -3,9 +3,11 @@ import { join } from "path";
 import { URL } from "url";
 import knex from "knex";
 import registerHandlers from "./handler";
+import { JSONFile, Low } from "lowdb";
+import Settings from "../../../types/database/Settings";
 
 const isSingleInstance = app.requestSingleInstanceLock();
-const isDevelopment = import.meta.env.MODE === "development";
+export const isDevelopment = import.meta.env.MODE === "development";
 
 if (!isSingleInstance) {
   app.quit();
@@ -26,6 +28,12 @@ let knexClient = knex({
   },
   useNullAsDefault: true,
 });
+
+const adapter = new JSONFile<Settings>(
+  join(process.resourcesPath, "..", "..", "..", "..", "res", "settings.json")
+);
+
+export const settings = new Low<Settings>(adapter);
 
 registerHandlers(knexClient);
 let mainWindow: BrowserWindow | null = null;

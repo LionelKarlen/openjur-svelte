@@ -1,10 +1,8 @@
 <script lang="ts">
-  import router from "page";
-  function handleclick() {
-    router("/entries");
-    console.log("test");
-  }
+  import BaseForm from "../components/forms/BaseForm.svelte";
+  import SettingsForm from "../components/forms/SettingsForm.svelte";
 </script>
 
 <h1>Settings</h1>
-<p on:click={handleclick}>test</p>
+
+<BaseForm form={SettingsForm} props={{}} isModal={false} />
