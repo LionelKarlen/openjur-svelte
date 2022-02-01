@@ -24,13 +24,13 @@ export default function registerFileHandlers() {
 
 export async function openFiles(path: string) {
   //TODO: Error handling
-  shell.openPath(path);
+  shell.openPath(`${path}.docx`);
   shell.openPath(`${path.split(".")[0]}.pdf`);
 }
 
 export async function deleteFiles(path: string) {
   //TODO: Error handling
-  fs.unlink(path);
+  fs.unlink(`${path}.docx`);
   fs.unlink(`${path.split(".")[0]}.pdf`);
 }
 

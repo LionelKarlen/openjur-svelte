@@ -13,7 +13,7 @@ import Creditor from "/type/util/Creditor";
 import Debtor from "../../../../types/util/Debtor";
 import { settings, isDevelopment } from "../index";
 import * as path from "path";
-import { writeToFile } from "./file";
+import { openFiles, writeToFile } from "./file";
 import Invoice from "../../../../types/database/Invoice";
 import { addInvoice } from "./invoices";
 
@@ -128,7 +128,6 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
   );
   if (success) {
     settings.write();
-    // TODO: Add invoice object
     let invoiceObject: Invoice = {
       amount: exportObject.total,
       extRef: invoiceID,
@@ -138,7 +137,6 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
     };
     await addInvoice(knexClient, invoiceObject);
 
-    // TODO: Update InvoiceID in entries
     for (let entry of initialEntries) {
       let updatedEntry = {
         ...entry,
@@ -146,5 +144,6 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
       };
       await updateEntry(knexClient, updatedEntry);
     }
+    await openFiles(exportPath);
   }
 }

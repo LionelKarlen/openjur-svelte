@@ -8,7 +8,7 @@
 - ~~add invoice reference~~
 - ~~add invoice objects~~
 - add pdf export
-- open files after export
+- ~~open files after export~~
 
 ### Bug Fixes
 
