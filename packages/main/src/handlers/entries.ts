@@ -31,7 +31,7 @@ export default function registerEntryHandlers(knexClient: Knex) {
     return await getEntriesByUserID(knexClient, data);
   });
 
-  ipcMain.handle("getEntriesByID", async (event, data: id) => {
+  ipcMain.handle("getEntryByID", async (event, data: id) => {
     return await getEntryByID(knexClient, data);
   });
 

@@ -53,6 +53,10 @@
       key: "invoiceID",
       value: "InvoiceID",
     },
+    {
+      key: "actions",
+      value: "Actions",
+    },
   ];
 
   export let id: string;
@@ -149,7 +153,29 @@
     <Row style="padding:0">
       <Column style="padding:0">
         {#if filteredEntries.length > 0}
-          <DataTable style="padding:0" {headers} rows={filteredEntries} />
+          <DataTable style="padding:0" {headers} rows={filteredEntries}>
+            <svelte:fragment slot="cell" let:cell let:row>
+              {#if cell.key === "actions"}
+                <Button
+                  on:click={async () => {
+                    console.log(row);
+                    entry = await ipc.invoke("getEntryByID", row.id);
+                    console.log(entry);
+                    openEntryModal = true;
+                  }}
+                  iconDescription="Edit"
+                  kind="ghost"
+                  icon={Edit32}
+                />
+                <Button
+                  on:click={() => (openConfirmModal = true)}
+                  iconDescription="Delete"
+                  kind="ghost"
+                  icon={Delete32}
+                />
+              {:else}{cell.value}{/if}
+            </svelte:fragment>
+          </DataTable>
         {:else}
           <DataTableSkeleton showHeader={true} showToolbar={false} />
         {/if}

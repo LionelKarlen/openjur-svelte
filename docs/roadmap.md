@@ -32,6 +32,7 @@
 
 - fix entry ui on empty entries
 - fix pdfkit export (@cache decorator)
+- refactor modal system
 
 # 0.6.0
 
