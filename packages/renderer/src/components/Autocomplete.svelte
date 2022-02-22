@@ -2,7 +2,7 @@
   import { ComboBox } from "carbon-components-svelte";
   import type { ComboBoxItem } from "carbon-components-svelte/types/ComboBox/ComboBox.svelte";
 
-  export let value = "";
+  export let value: string;
   export let labelText = "";
   export let placeholder = "";
   export let suggestions = [];
@@ -11,6 +11,8 @@
     if (!val) return true;
     return item.text.toLowerCase().includes(val.toLowerCase());
   }
+  $: console.log(value);
+  $: console.log(suggestions);
 </script>
 
 <div>

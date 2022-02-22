@@ -72,7 +72,9 @@
   }
 
   onMount(async () => {
+    console.log("default", defaultEntry);
     if (defaultEntry.id != null) {
+      console.log("made it");
       date = formatDate(defaultEntry.date);
       clientID = defaultEntry.clientID;
       hours = defaultEntry.hours;
@@ -80,12 +82,13 @@
       userID = defaultEntry.userID;
       fixedAmount = defaultEntry.fixedAmount;
       isFixed = defaultEntry.fixedAmount > 0;
+    } else {
+      date = formatDate(Date.now() / 1000);
     }
     let settings = await ipc.invoke("getSettings");
     entryTextSuggestions = settings.entryTextSuggestions;
     clients = await ipc.invoke("getClients");
     users = await ipc.invoke("getUsers");
-    date = formatDate(Date.now() / 1000);
     clients.map((value: Client, i: number) => {
       if (value.id == id) {
         selectedClientIndex = i;
@@ -145,7 +148,7 @@
     <Autocomplete
       bind:value={text}
       labelText="Text"
-      suggestions={entryTextSuggestions}
+      bind:suggestions={entryTextSuggestions}
       placeholder="research"
     />
     <NumberInput bind:value={hours} hideSteppers label="Hours" />

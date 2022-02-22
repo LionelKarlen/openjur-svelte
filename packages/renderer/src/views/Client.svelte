@@ -23,6 +23,7 @@
   import type Entry from "/type/database/Entry";
   import type { DataTableRow } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
   import ExportForm from "../components/forms/ExportForm.svelte";
+  import ModalHandler from "../components/forms/ModalHandler.svelte";
 
   let headers = [
     {
@@ -81,16 +82,19 @@
 </script>
 
 {#if client != null}
-  <FormModal
-    bind:open={openEntryModal}
-    heading="Add Entry"
-    form={EntryForm}
-    props={{
-      defaultEntry: entry,
-      id: id,
-    }}
-    on:reloadData={() => getData(id)}
-  />
+  <ModalHandler let:openModal>{openModal()}</ModalHandler>
+  {#if openEntryModal}
+    <FormModal
+      bind:open={openEntryModal}
+      heading="Add Entry"
+      form={EntryForm}
+      props={{
+        defaultEntry: entry,
+        id: id,
+      }}
+      on:reloadData={() => getData(id)}
+    />
+  {/if}
   <FormModal
     bind:open={openClientModal}
     heading="Add Client"
@@ -131,7 +135,10 @@
         />
       </Column>
       <Button
-        on:click={() => (openEntryModal = true)}
+        on:click={() => {
+          entry = undefined;
+          openEntryModal = true;
+        }}
         style="margin-top: 2rem; margin-bottom: 2rem;margin-right:2rem;padding-right: 15px;"
         >New Entry</Button
       >

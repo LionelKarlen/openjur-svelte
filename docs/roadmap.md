@@ -33,6 +33,8 @@
 - fix entry ui on empty entries
 - fix pdfkit export (@cache decorator)
 - refactor modal system
+- fix datetime calendar icon
+- fix autocomplete not visually updating value
 
 # 0.6.0
 
