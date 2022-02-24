@@ -47,7 +47,11 @@
       id: defaultEntry.id != null ? defaultEntry.id : null,
     };
     console.log("entry", entry);
-    ipc.invoke("addEntry", entry);
+    if (entry.id) {
+      ipc.invoke("updateEntry", entry);
+    } else {
+      ipc.invoke("addEntry", entry);
+    }
   };
 
   export let isValid = false;

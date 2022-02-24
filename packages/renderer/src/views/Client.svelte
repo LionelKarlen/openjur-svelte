@@ -150,7 +150,18 @@
                   icon={Edit32}
                 />
                 <Button
-                  on:click={() => {}}
+                  on:click={() => {
+                    openModal(
+                      "Confirm Delete",
+                      DeleteForm,
+                      {
+                        obj: row,
+                        invoke: "deleteEntry",
+                        deletionType: DeletionTypes.Entry,
+                      },
+                      () => getData(id)
+                    );
+                  }}
                   iconDescription="Delete"
                   kind="ghost"
                   icon={Delete32}

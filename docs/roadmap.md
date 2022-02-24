@@ -23,7 +23,7 @@
 
 ### Features
 
-- add entry actions
+~- add entry actions~
 - add entry table dropdown
 - add entry table invoice reference
 - add user feedback toasts
