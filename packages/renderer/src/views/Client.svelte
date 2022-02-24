@@ -13,7 +13,6 @@
     Grid,
     Row,
   } from "carbon-components-svelte";
-  import FormModal from "../components/forms/FormModal.svelte";
   import ClientForm from "../components/forms/ClientForm.svelte";
   import ClientDeleteForm from "../components/forms/ClientDeleteForm.svelte";
   import EntryForm from "../components/forms/EntryForm.svelte";
@@ -24,6 +23,7 @@
   import type { DataTableRow } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
   import ExportForm from "../components/forms/ExportForm.svelte";
   import ModalHandler from "../components/forms/ModalHandler.svelte";
+  import type OpenModal from "/type/util/OpenModal";
 
   let headers = [
     {
@@ -63,10 +63,7 @@
   export let id: string;
   let client: Client;
   let entry: Entry;
-  let openClientModal = false;
-  let openConfirmModal = false;
-  let openEntryModal = false;
-  let openExportModal = false;
+  let openModal: OpenModal;
   let filteredEntries: DataTableRow[] = [];
 
   onMount(() => getData(id));
@@ -82,47 +79,7 @@
 </script>
 
 {#if client != null}
-  <ModalHandler let:openModal>{openModal()}</ModalHandler>
-  {#if openEntryModal}
-    <FormModal
-      bind:open={openEntryModal}
-      heading="Add Entry"
-      form={EntryForm}
-      props={{
-        defaultEntry: entry,
-        id: id,
-      }}
-      on:reloadData={() => getData(id)}
-    />
-  {/if}
-  <FormModal
-    bind:open={openClientModal}
-    heading="Add Client"
-    form={ClientForm}
-    props={{
-      defaultClient: client,
-    }}
-    on:reloadData={() => getData(id)}
-  />
-  <FormModal
-    bind:open={openExportModal}
-    heading="Export to File"
-    form={ExportForm}
-    props={{
-      id: id,
-      isUser: false,
-    }}
-    on:reloadData={() => getData(id)}
-  />
-  <FormModal
-    bind:open={openConfirmModal}
-    heading="Confirm delete"
-    form={ClientDeleteForm}
-    props={{
-      obj: client,
-    }}
-    on:reloadData={() => page("/clients")}
-  />
+  <ModalHandler bind:openModal />
   <Grid>
     <Row style="padding: 1rem;">
       <Column style="padding:0;">
@@ -136,21 +93,26 @@
       </Column>
       <Button
         on:click={() => {
-          entry = undefined;
-          openEntryModal = true;
+          openModal("Add Entry", EntryForm, { id: id }, () => getData(id));
         }}
         style="margin-top: 2rem; margin-bottom: 2rem;margin-right:2rem;padding-right: 15px;"
         >New Entry</Button
       >
       <Button
-        on:click={() => (openClientModal = true)}
+        on:click={() =>
+          openModal("Edit Client", ClientForm, { defaultClient: client }, () =>
+            getData(id)
+          )}
         iconDescription="Edit"
         kind="ghost"
         icon={Edit32}
         style="margin-top: 2rem; margin-bottom: 2rem;"
       />
       <Button
-        on:click={() => (openConfirmModal = true)}
+        on:click={() =>
+          openModal("Confirm Delete", ClientDeleteForm, { obj: client }, () =>
+            page("/clients")
+          )}
         iconDescription="Delete"
         kind="ghost"
         icon={Delete32}
@@ -165,17 +127,22 @@
               {#if cell.key === "actions"}
                 <Button
                   on:click={async () => {
-                    console.log(row);
                     entry = await ipc.invoke("getEntryByID", row.id);
-                    console.log(entry);
-                    openEntryModal = true;
+                    openModal(
+                      "Edit Entry",
+                      EntryForm,
+                      { id: id, defaultEntry: entry },
+                      () => {
+                        getData(id);
+                      }
+                    );
                   }}
                   iconDescription="Edit"
                   kind="ghost"
                   icon={Edit32}
                 />
                 <Button
-                  on:click={() => (openConfirmModal = true)}
+                  on:click={() => {}}
                   iconDescription="Delete"
                   kind="ghost"
                   icon={Delete32}
@@ -186,7 +153,15 @@
         {:else}
           <DataTableSkeleton showHeader={true} showToolbar={false} />
         {/if}
-        <Button on:click={() => (openExportModal = true)}>Export</Button>
+        <Button
+          on:click={() =>
+            openModal(
+              "Export to File",
+              ExportForm,
+              { id: id, isUser: false },
+              () => getData(id)
+            )}>Export</Button
+        >
       </Column>
     </Row>
   </Grid>

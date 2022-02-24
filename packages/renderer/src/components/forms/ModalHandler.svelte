@@ -7,21 +7,21 @@
   let heading: string;
   let form: typeof SvelteComponent;
   let props: {};
-  let onReloadData: (e: CustomEvent<any>) => {};
+  let onReloadData: (e: CustomEvent<any>) => void;
 
-  export function openModal(
+  export const openModal = (
     header: string,
     formComponent: typeof SvelteComponent,
     properties: {},
-    onClose: (e: CustomEvent<any>) => {}
-  ): void {
+    onClose: (e: CustomEvent<any>) => void
+  ): void => {
     heading = header;
     form = formComponent;
     props = properties;
     onReloadData = onClose;
 
     open = true;
-  }
+  };
 </script>
 
 {#if open}

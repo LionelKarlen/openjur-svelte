@@ -14,9 +14,10 @@
     StructuredListSkeleton,
   } from "carbon-components-svelte";
   import page from "page";
-  import FormModal from "../components/forms/FormModal.svelte";
   import ClientForm from "../components/forms/ClientForm.svelte";
   import { sortAlphabetically } from "../services/util";
+  import ModalHandler from "../components/forms/ModalHandler.svelte";
+  import type OpenModal from "/type/util/OpenModal";
 
   let clients: Client[] = [];
   let filteredClients: Client[] = [];
@@ -39,23 +40,20 @@
     });
   }
   $: filterClients(searchValue);
-
-  let openModal = false;
+  let openModal: OpenModal;
 </script>
 
 <h1>Clients</h1>
 <Grid>
   <Row>
     <Search bind:value={searchValue} />
-    <Button on:click={() => (openModal = true)}>Add Client</Button>
+    <Button
+      on:click={() => openModal("Add Client", ClientForm, {}, () => getData())}
+      >Add Client</Button
+    >
   </Row>
 </Grid>
-<FormModal
-  bind:open={openModal}
-  heading="Add Client"
-  form={ClientForm}
-  on:reloadData={() => getData()}
-/>
+<ModalHandler bind:openModal />
 {#if clients.length > 0}
   <StructuredList condensed selection>
     <StructuredListHead>
