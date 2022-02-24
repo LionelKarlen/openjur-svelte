@@ -35,7 +35,7 @@
 ~- refactor modal system~
 - fix datetime calendar icon
 - fix autocomplete not visually updating value
-- refactor deletion modal
+~- refactor deletion modal~
 - fix deletion modal redirect on cancel
 
 # 0.6.0

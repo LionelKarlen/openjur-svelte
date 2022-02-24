@@ -14,7 +14,6 @@
     Row,
   } from "carbon-components-svelte";
   import ClientForm from "../components/forms/ClientForm.svelte";
-  import ClientDeleteForm from "../components/forms/ClientDeleteForm.svelte";
   import EntryForm from "../components/forms/EntryForm.svelte";
 
   import Edit32 from "carbon-icons-svelte/lib/Edit32";
@@ -24,6 +23,8 @@
   import ExportForm from "../components/forms/ExportForm.svelte";
   import ModalHandler from "../components/forms/ModalHandler.svelte";
   import type OpenModal from "/type/util/OpenModal";
+  import DeleteForm from "../components/forms/DeleteForm.svelte";
+  import DeletionTypes from "../../../../types/util/DeletionTypes";
 
   let headers = [
     {
@@ -110,8 +111,15 @@
       />
       <Button
         on:click={() =>
-          openModal("Confirm Delete", ClientDeleteForm, { obj: client }, () =>
-            page("/clients")
+          openModal(
+            "Confirm Delete",
+            DeleteForm,
+            {
+              obj: client,
+              invoke: "deleteClient",
+              deletionType: DeletionTypes.Client,
+            },
+            () => page("/clients")
           )}
         iconDescription="Delete"
         kind="ghost"

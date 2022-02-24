@@ -6,13 +6,14 @@
 
   import type User from "/type/database/User";
   import { Button, Column, Grid, Row } from "carbon-components-svelte";
-  import UserDeleteForm from "../components/forms/UserDeleteForm.svelte";
 
   import Edit32 from "carbon-icons-svelte/lib/Edit32";
   import Delete32 from "carbon-icons-svelte/lib/Delete32";
   import UserForm from "../components/forms/UserForm.svelte";
   import ModalHandler from "../components/forms/ModalHandler.svelte";
   import type OpenModal from "/type/util/OpenModal";
+  import DeleteForm from "../components/forms/DeleteForm.svelte";
+  import DeletionTypes from "../../../../types/util/DeletionTypes";
 
   export let id: string;
   let user: User;
@@ -54,8 +55,15 @@
       />
       <Button
         on:click={() =>
-          openModal("Confirm Delete", UserDeleteForm, { obj: user }, () =>
-            page("/users")
+          openModal(
+            "Confirm Delete",
+            DeleteForm,
+            {
+              invoke: "deleteUser",
+              obj: user,
+              deletionType: DeletionTypes.User,
+            },
+            () => page("/users")
           )}
         iconDescription="Delete"
         kind="ghost"
