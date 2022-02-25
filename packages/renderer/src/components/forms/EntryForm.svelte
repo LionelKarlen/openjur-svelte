@@ -98,6 +98,7 @@
         selectedClientIndex = i;
       }
     });
+    validate();
   });
   $: console.log(selectedClientIndex);
 
@@ -155,6 +156,7 @@
       bind:suggestions={entryTextSuggestions}
       placeholder="research"
     />
+    <!-- <TextInput bind:value={text} labelText="Text" placeholder="Research" /> -->
     <NumberInput bind:value={hours} hideSteppers label="Hours" />
   </FormGroup>
   <FormGroup>

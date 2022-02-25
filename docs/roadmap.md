@@ -27,6 +27,7 @@
 - add entry table dropdown
 - add entry table invoice reference
 - add user feedback toasts
+- summarise fixcosts on export
 
 ### Bug Fixes
 
@@ -37,6 +38,7 @@
 - fix autocomplete not visually updating value
 ~- refactor deletion modal~
 - fix deletion modal redirect on cancel
+- fix entries sorting
 
 # 0.6.0
 

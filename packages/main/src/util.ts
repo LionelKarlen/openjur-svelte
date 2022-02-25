@@ -1,4 +1,5 @@
 import Client from "/type/database/Client";
+import Entry from "/type/database/Entry";
 import User from "/type/database/User";
 import id from "/type/util/Id";
 
@@ -14,5 +15,9 @@ export default class Util {
     return `${debtor.address}
 ${debtor.zip} ${debtor.city}
 ${debtor.country}`;
+  }
+
+  static sortEntries(entries: Entry[]) {
+    return entries.sort((a, b) => a.date - b.date);
   }
 }
