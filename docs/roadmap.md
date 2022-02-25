@@ -31,14 +31,14 @@
 
 ### Bug Fixes
 
-- fix entry ui on empty entries
+~- fix entry ui on empty entries~
 - fix pdfkit export (@cache decorator)
 ~- refactor modal system~
 - fix datetime calendar icon
 - fix autocomplete not visually updating value
 ~- refactor deletion modal~
 - fix deletion modal redirect on cancel
-- fix entries sorting
+~- fix entries sorting~
 
 # 0.6.0
 

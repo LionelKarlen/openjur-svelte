@@ -170,7 +170,8 @@
             </svelte:fragment>
           </DataTable>
         {:else}
-          <DataTableSkeleton showHeader={true} showToolbar={false} />
+          <h3>No data found.</h3>
+          <DataTableSkeleton showHeader={false} showToolbar={false} />
         {/if}
         <Button
           on:click={() =>
