@@ -14,7 +14,7 @@
 <Form
   on:submit={() => {
     submit();
-    dispatch("close");
+    dispatch("submit");
   }}
   novalidate={true}
 >

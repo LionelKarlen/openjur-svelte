@@ -10,9 +10,11 @@
 
   const dispatch = createEventDispatcher();
 
-  function closeModal() {
+  function closeModal(shouldReload: boolean = false) {
     open = false;
-    dispatch("reloadData");
+    if (shouldReload) {
+      dispatch("reloadData");
+    }
   }
 </script>
 
@@ -24,5 +26,10 @@
   passiveModal
   on:close={() => closeModal()}
 >
-  <BaseForm {form} on:close={() => closeModal()} {props} />
+  <BaseForm
+    {form}
+    on:close={() => closeModal()}
+    on:submit={() => closeModal(true)}
+    {props}
+  />
 </Modal>

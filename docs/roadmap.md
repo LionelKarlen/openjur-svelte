@@ -37,7 +37,7 @@
 ~- fix datetime calendar icon~
 - fix autocomplete not visually updating value
 ~- refactor deletion modal~
-- fix deletion modal redirect on cancel
+~- fix deletion modal redirect on cancel~
 ~- fix entries sorting~
 
 # 0.6.0
