@@ -169,3 +169,12 @@
     </FormGroup>
   {/if}
 </div>
+
+<style>
+  :global(.bx--date-picker__input) {
+    width: 100% !important;
+  }
+  :global(.bx--date-picker--single) {
+    width: 100% !important;
+  }
+</style>
