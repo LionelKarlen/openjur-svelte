@@ -25,6 +25,8 @@
   import type OpenModal from "/type/util/OpenModal";
   import DeleteForm from "../components/forms/DeleteForm.svelte";
   import DeletionTypes from "../../../../types/util/DeletionTypes";
+  import type Invoice from "/type/database/Invoice";
+  import InvoiceRender from "../components/InvoiceRender.svelte";
 
   let headers = [
     {
@@ -66,6 +68,7 @@
   let entry: Entry;
   let openModal: OpenModal;
   let filteredEntries: DataTableRow[] = [];
+  let invoices: Invoice[] = [];
 
   onMount(() => getData(id));
   async function getData(id: string) {
@@ -74,6 +77,7 @@
       id: id,
       false: false,
     });
+    invoices = await ipc.invoke("getInvoicesByClientID", id);
   }
   $: console.log(client);
   $: console.log("entries", filteredEntries);
@@ -182,6 +186,27 @@
               () => getData(id)
             )}>Export</Button
         >
+        <Row style="margin:0">
+          {#each invoices as invoice}
+            <div
+              on:contextmenu|preventDefault={() =>
+                openModal(
+                  "Confirm Delete",
+                  DeleteForm,
+                  {
+                    obj: invoice,
+                    invoke: "deleteInvoice",
+                    deletionType: DeletionTypes.Invoice,
+                  },
+                  () => {
+                    getData(id);
+                  }
+                )}
+            >
+              <InvoiceRender {invoice} />
+            </div>
+          {/each}
+        </Row>
       </Column>
     </Row>
   </Grid>

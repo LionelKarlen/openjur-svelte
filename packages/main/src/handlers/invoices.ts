@@ -1,8 +1,10 @@
 import { ipcMain } from "electron";
 import { Knex } from "knex";
 import type id from "../../../../types/util/Id";
-import type Invoice from "/type/database/Invoice";
-import Util from "../util";
+import { getEntries } from "./entries";
+import knex from "knex";
+import Invoice from "../../../../types/database/Invoice";
+import { deleteFiles } from "./file";
 const collection = "invoices";
 
 export default function registerInvoiceHandlers(knexClient: Knex) {
@@ -72,6 +74,17 @@ export async function addInvoice(knexClient: Knex, invoice: Invoice) {
 
 export async function deleteInvoice(knexClient: Knex, id: id) {
   await knexClient
+    .table("entries")
+    .where({ invoiceID: `${id}` })
+    .update({
+      invoiceID: null,
+    });
+  let data = await knexClient.table(collection).where({
+    id: `${id}`,
+  });
+  let invoice: Invoice = data[0];
+  await deleteFiles(invoice.path);
+  await knexClient
     .table(collection)
     .where({
       id: `${id}`,
@@ -79,6 +92,4 @@ export async function deleteInvoice(knexClient: Knex, id: id) {
     .delete();
 }
 
-export async function validateInvoices(knexClient: Knex) {
-  //TODO: IMPLEMENT VALIDATEINVOICES
-}
+export async function validateInvoices(knexClient: Knex) {}
