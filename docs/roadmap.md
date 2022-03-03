@@ -39,7 +39,7 @@
 ~- refactor deletion modal~
 ~- fix deletion modal redirect on cancel~
 ~- fix entries sorting~
-
+- fix update in validate invoice method
 # 0.6.0
 
 ### Features
