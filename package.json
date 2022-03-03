@@ -32,6 +32,7 @@
     "autoprefixer": "^10.4.0",
     "carbon-components-svelte": "^0.50.2",
     "carbon-icons-svelte": "^10.44.3",
+    "carbon-preprocess-svelte": "^0.6.0",
     "cross-env": "7.0.3",
     "electron": "16.0.1",
     "electron-builder": "22.14.5",
