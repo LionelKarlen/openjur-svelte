@@ -23,22 +23,22 @@
 
 ### Features
 
-~- add entry actions~
+- ~add entry actions~
 - add entry table dropdown
-~- add entry table invoice reference~
+- ~add entry table invoice reference~
 - add user feedback toasts
 - summarise fixcosts on export
 
 ### Bug Fixes
 
-~- fix entry ui on empty entries~
+- ~fix entry ui on empty entries~
 - fix pdfkit export (@cache decorator)
-~- refactor modal system~
-~- fix datetime calendar icon~
+- ~refactor modal system~
+- ~fix datetime calendar icon~
 - fix autocomplete not visually updating value
-~- refactor deletion modal~
-~- fix deletion modal redirect on cancel~
-~- fix entries sorting~
+- ~refactor deletion modal~
+- ~fix deletion modal redirect on cancel~
+- ~fix entries sorting~
 - fix update in validate invoice method
 # 0.6.0
 
