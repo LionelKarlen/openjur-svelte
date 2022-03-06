@@ -1,6 +1,6 @@
 {
   "MWST": 7.7,
-  "clientTemplatePath": "/home/lionel/Downloads/LG Example IO.docx",
+  "clientTemplatePath": "/home/lionel/Documents/programming/Web/openjur/openjur-svelte/res/template.docx",
   "userTemplatePath": "/home/lionel/Documents/essay.odt",
   "entryTextSuggestions": [
     "adsfadsf",
@@ -15,8 +15,8 @@
   "address": "asdfasdf",
   "zip": 123,
   "city": "asdfsad",
-  "country": "sadfsd",
+  "country": "sadfs",
   "IBAN": "sadfadsf",
   "runningYear": 2022,
-  "runningInvoiceID": 21
+  "runningInvoiceID": 29
 }

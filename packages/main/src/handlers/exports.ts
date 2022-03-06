@@ -51,10 +51,16 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
 
   let hoursTotal = 0;
   let chargeTotal = 0;
+  let charges = [];
   for (const entry of entries) {
     hoursTotal += entry.amount;
     if (entry.fixedAmount != "N/A") {
       chargeTotal += Number.parseInt(entry.fixedAmount.toString());
+      let obj = {
+        charge: entry.text,
+        amount: Number.parseInt(entry.fixedAmount.toString()),
+      };
+      charges.push(obj);
     }
   }
   let debtor = params.isUser
@@ -79,6 +85,7 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
   let exportObject: ExportData = {
     date: formatDate(date),
     entries: entries,
+    charges: Util.summariseFixcosts(charges),
     clientName: debtor.name,
     clientAddress: Util.formatAddress(debtor),
     mwst: `${mwst}%`,
