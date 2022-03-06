@@ -14,8 +14,8 @@
     if (!val) return true;
     return item.text.toLowerCase().includes(val.toLowerCase());
   }
-  function handleUpdate(s) {
-    values = [value];
+  function handleUpdate(s: string) {
+    values = [s];
     values.push(...suggestions);
     values = values;
   }
