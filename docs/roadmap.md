@@ -36,7 +36,7 @@
 - fix pdfkit export (@cache decorator)
 - ~refactor modal system~
 - ~fix datetime calendar icon~
-- fix autocomplete not visually updating value
+- ~fix autocomplete not visually updating value~
 - ~refactor deletion modal~
 - ~fix deletion modal redirect on cancel~
 - ~fix entries sorting~

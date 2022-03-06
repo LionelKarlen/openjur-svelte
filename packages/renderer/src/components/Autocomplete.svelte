@@ -2,17 +2,28 @@
   import { ComboBox } from "carbon-components-svelte";
   import type { ComboBoxItem } from "carbon-components-svelte/types/ComboBox/ComboBox.svelte";
 
-  export let value: string;
+  export let value: string = "";
   export let labelText = "";
   export let placeholder = "";
   export let suggestions = [];
+  let values = [];
+  let selectedIndex = 0;
 
   function update(item: ComboBoxItem, val: string) {
+    if (item.text == val) return false;
     if (!val) return true;
     return item.text.toLowerCase().includes(val.toLowerCase());
   }
-  $: console.log(value);
-  $: console.log(suggestions);
+  function handleUpdate(s) {
+    values = [value];
+    values.push(...suggestions);
+    values = values;
+  }
+  $: console.log("value", value);
+  $: handleUpdate(value);
+  $: console.log("selectedIndex", selectedIndex);
+  $: console.log("suggestions", suggestions);
+  $: console.log("values", values);
 </script>
 
 <div>
@@ -20,8 +31,9 @@
     shouldFilterItem={update}
     titleText={labelText}
     {placeholder}
+    bind:selectedIndex
     bind:value
-    items={suggestions.map((v, i) => {
+    items={values.map((v, i) => {
       return {
         id: i.toString(),
         text: v,
