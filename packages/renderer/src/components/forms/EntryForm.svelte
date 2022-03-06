@@ -47,7 +47,11 @@
       id: defaultEntry.id != null ? defaultEntry.id : null,
     };
     console.log("entry", entry);
-    ipc.invoke("addEntry", entry);
+    if (entry.id) {
+      ipc.invoke("updateEntry", entry);
+    } else {
+      ipc.invoke("addEntry", entry);
+    }
   };
 
   export let isValid = false;
@@ -72,7 +76,9 @@
   }
 
   onMount(async () => {
+    console.log("default", defaultEntry);
     if (defaultEntry.id != null) {
+      console.log("made it");
       date = formatDate(defaultEntry.date);
       clientID = defaultEntry.clientID;
       hours = defaultEntry.hours;
@@ -80,17 +86,19 @@
       userID = defaultEntry.userID;
       fixedAmount = defaultEntry.fixedAmount;
       isFixed = defaultEntry.fixedAmount > 0;
+    } else {
+      date = formatDate(Date.now() / 1000);
     }
     let settings = await ipc.invoke("getSettings");
     entryTextSuggestions = settings.entryTextSuggestions;
     clients = await ipc.invoke("getClients");
     users = await ipc.invoke("getUsers");
-    date = formatDate(Date.now() / 1000);
     clients.map((value: Client, i: number) => {
       if (value.id == id) {
         selectedClientIndex = i;
       }
     });
+    validate();
   });
   $: console.log(selectedClientIndex);
 
@@ -145,9 +153,10 @@
     <Autocomplete
       bind:value={text}
       labelText="Text"
-      suggestions={entryTextSuggestions}
+      bind:suggestions={entryTextSuggestions}
       placeholder="research"
     />
+    <!-- <TextInput bind:value={text} labelText="Text" placeholder="Research" /> -->
     <NumberInput bind:value={hours} hideSteppers label="Hours" />
   </FormGroup>
   <FormGroup>
@@ -160,3 +169,12 @@
     </FormGroup>
   {/if}
 </div>
+
+<style>
+  :global(.bx--date-picker__input) {
+    width: 100% !important;
+  }
+  :global(.bx--date-picker--single) {
+    width: 100% !important;
+  }
+</style>

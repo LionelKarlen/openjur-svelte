@@ -30,13 +30,23 @@ export async function openFiles(path: string) {
 
 export async function deleteFiles(path: string) {
   //TODO: Error handling
-  fs.unlink(`${path}.docx`);
-  fs.unlink(`${path.split(".")[0]}.pdf`);
+  try {
+    fs.unlink(`${path}.docx`);
+    fs.unlink(`${path.split(".")[0]}.pdf`);
+  } catch (error) {}
 }
 
 export function openFolder(path: string) {
   //TODO: Error handling
   shell.openPath(join(process.resourcesPath, "defaultFiles"));
+}
+
+export async function fileExists(path: string) {
+  try {
+    let stat = await fs.stat(path);
+    return true;
+  } catch (e) {}
+  return false;
 }
 
 export async function writeToFile(

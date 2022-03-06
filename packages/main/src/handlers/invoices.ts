@@ -1,8 +1,10 @@
 import { ipcMain } from "electron";
 import { Knex } from "knex";
 import type id from "../../../../types/util/Id";
-import type Invoice from "/type/database/Invoice";
-import Util from "../util";
+import { getEntries } from "./entries";
+import knex from "knex";
+import Invoice from "../../../../types/database/Invoice";
+import { deleteFiles, fileExists } from "./file";
 const collection = "invoices";
 
 export default function registerInvoiceHandlers(knexClient: Knex) {
@@ -44,6 +46,7 @@ export async function getInvoicesByClientID(
   knexClient: Knex,
   id: id
 ): Promise<Invoice[]> {
+  await validateInvoices(knexClient);
   let Invoice = (await knexClient
     .select("*")
     .from(collection)
@@ -72,6 +75,19 @@ export async function addInvoice(knexClient: Knex, invoice: Invoice) {
 
 export async function deleteInvoice(knexClient: Knex, id: id) {
   await knexClient
+    .table("entries")
+    .where({ invoiceID: `${id}` })
+    .update({
+      invoiceID: null,
+    });
+  let data = await knexClient.table(collection).where({
+    id: `${id}`,
+  });
+  let invoice: Invoice = data[0];
+  try {
+    await deleteFiles(invoice.path);
+  } catch (error) {}
+  await knexClient
     .table(collection)
     .where({
       id: `${id}`,
@@ -80,5 +96,11 @@ export async function deleteInvoice(knexClient: Knex, id: id) {
 }
 
 export async function validateInvoices(knexClient: Knex) {
-  //TODO: IMPLEMENT VALIDATEINVOICES
+  let invoices = (await knexClient.table(collection)) as Invoice[];
+  console.log(invoices);
+  for (const invoice of invoices) {
+    if (!(await fileExists(`${invoice.path}.docx`))) {
+      deleteInvoice(knexClient, invoice.id);
+    }
+  }
 }

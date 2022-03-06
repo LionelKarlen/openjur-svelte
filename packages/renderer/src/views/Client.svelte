@@ -13,9 +13,7 @@
     Grid,
     Row,
   } from "carbon-components-svelte";
-  import FormModal from "../components/forms/FormModal.svelte";
   import ClientForm from "../components/forms/ClientForm.svelte";
-  import ClientDeleteForm from "../components/forms/ClientDeleteForm.svelte";
   import EntryForm from "../components/forms/EntryForm.svelte";
 
   import Edit32 from "carbon-icons-svelte/lib/Edit32";
@@ -23,6 +21,12 @@
   import type Entry from "/type/database/Entry";
   import type { DataTableRow } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
   import ExportForm from "../components/forms/ExportForm.svelte";
+  import ModalHandler from "../components/forms/ModalHandler.svelte";
+  import type OpenModal from "/type/util/OpenModal";
+  import DeleteForm from "../components/forms/DeleteForm.svelte";
+  import DeletionTypes from "../../../../types/util/DeletionTypes";
+  import type Invoice from "/type/database/Invoice";
+  import InvoiceRender from "../components/InvoiceRender.svelte";
 
   let headers = [
     {
@@ -53,16 +57,18 @@
       key: "invoiceID",
       value: "InvoiceID",
     },
+    {
+      key: "actions",
+      value: "Actions",
+    },
   ];
 
   export let id: string;
   let client: Client;
   let entry: Entry;
-  let openClientModal = false;
-  let openConfirmModal = false;
-  let openEntryModal = false;
-  let openExportModal = false;
+  let openModal: OpenModal;
   let filteredEntries: DataTableRow[] = [];
+  let invoices: Invoice[] = [];
 
   onMount(() => getData(id));
   async function getData(id: string) {
@@ -71,50 +77,14 @@
       id: id,
       false: false,
     });
+    invoices = await ipc.invoke("getInvoicesByClientID", id);
   }
   $: console.log(client);
   $: console.log("entries", filteredEntries);
 </script>
 
 {#if client != null}
-  <FormModal
-    bind:open={openEntryModal}
-    heading="Add Entry"
-    form={EntryForm}
-    props={{
-      defaultEntry: entry,
-      id: id,
-    }}
-    on:reloadData={() => getData(id)}
-  />
-  <FormModal
-    bind:open={openClientModal}
-    heading="Add Client"
-    form={ClientForm}
-    props={{
-      defaultClient: client,
-    }}
-    on:reloadData={() => getData(id)}
-  />
-  <FormModal
-    bind:open={openExportModal}
-    heading="Export to File"
-    form={ExportForm}
-    props={{
-      id: id,
-      isUser: false,
-    }}
-    on:reloadData={() => getData(id)}
-  />
-  <FormModal
-    bind:open={openConfirmModal}
-    heading="Confirm delete"
-    form={ClientDeleteForm}
-    props={{
-      obj: client,
-    }}
-    on:reloadData={() => page("/clients")}
-  />
+  <ModalHandler bind:openModal />
   <Grid>
     <Row style="padding: 1rem;">
       <Column style="padding:0;">
@@ -127,19 +97,34 @@
         />
       </Column>
       <Button
-        on:click={() => (openEntryModal = true)}
+        on:click={() => {
+          openModal("Add Entry", EntryForm, { id: id }, () => getData(id));
+        }}
         style="margin-top: 2rem; margin-bottom: 2rem;margin-right:2rem;padding-right: 15px;"
         >New Entry</Button
       >
       <Button
-        on:click={() => (openClientModal = true)}
+        on:click={() =>
+          openModal("Edit Client", ClientForm, { defaultClient: client }, () =>
+            getData(id)
+          )}
         iconDescription="Edit"
         kind="ghost"
         icon={Edit32}
         style="margin-top: 2rem; margin-bottom: 2rem;"
       />
       <Button
-        on:click={() => (openConfirmModal = true)}
+        on:click={() =>
+          openModal(
+            "Confirm Delete",
+            DeleteForm,
+            {
+              obj: client,
+              invoke: "deleteClient",
+              deletionType: DeletionTypes.Client,
+            },
+            () => page("/clients")
+          )}
         iconDescription="Delete"
         kind="ghost"
         icon={Delete32}
@@ -149,11 +134,79 @@
     <Row style="padding:0">
       <Column style="padding:0">
         {#if filteredEntries.length > 0}
-          <DataTable style="padding:0" {headers} rows={filteredEntries} />
+          <DataTable style="padding:0" {headers} rows={filteredEntries}>
+            <svelte:fragment slot="cell" let:cell let:row>
+              {#if cell.key === "actions"}
+                <Button
+                  on:click={async () => {
+                    entry = await ipc.invoke("getEntryByID", row.id);
+                    openModal(
+                      "Edit Entry",
+                      EntryForm,
+                      { id: id, defaultEntry: entry },
+                      () => {
+                        getData(id);
+                      }
+                    );
+                  }}
+                  iconDescription="Edit"
+                  kind="ghost"
+                  icon={Edit32}
+                />
+                <Button
+                  on:click={() => {
+                    openModal(
+                      "Confirm Delete",
+                      DeleteForm,
+                      {
+                        obj: row,
+                        invoke: "deleteEntry",
+                        deletionType: DeletionTypes.Entry,
+                      },
+                      () => getData(id)
+                    );
+                  }}
+                  iconDescription="Delete"
+                  kind="ghost"
+                  icon={Delete32}
+                />
+              {:else}{cell.value}{/if}
+            </svelte:fragment>
+          </DataTable>
         {:else}
-          <DataTableSkeleton showHeader={true} showToolbar={false} />
+          <h3>No data found.</h3>
+          <DataTableSkeleton showHeader={false} showToolbar={false} />
         {/if}
-        <Button on:click={() => (openExportModal = true)}>Export</Button>
+        <Button
+          on:click={() =>
+            openModal(
+              "Export to File",
+              ExportForm,
+              { id: id, isUser: false },
+              () => getData(id)
+            )}>Export</Button
+        >
+        <Row style="margin:0">
+          {#each invoices as invoice}
+            <div
+              on:contextmenu|preventDefault={() =>
+                openModal(
+                  "Confirm Delete",
+                  DeleteForm,
+                  {
+                    obj: invoice,
+                    invoke: "deleteInvoice",
+                    deletionType: DeletionTypes.Invoice,
+                  },
+                  () => {
+                    getData(id);
+                  }
+                )}
+            >
+              <InvoiceRender {invoice} />
+            </div>
+          {/each}
+        </Row>
       </Column>
     </Row>
   </Grid>

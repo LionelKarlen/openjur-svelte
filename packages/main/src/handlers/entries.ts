@@ -31,7 +31,7 @@ export default function registerEntryHandlers(knexClient: Knex) {
     return await getEntriesByUserID(knexClient, data);
   });
 
-  ipcMain.handle("getEntriesByID", async (event, data: id) => {
+  ipcMain.handle("getEntryByID", async (event, data: id) => {
     return await getEntryByID(knexClient, data);
   });
 
@@ -49,7 +49,8 @@ export default function registerEntryHandlers(knexClient: Knex) {
 }
 
 export async function getEntries(knexClient: Knex): Promise<Entry[]> {
-  return (await knexClient.select("*").from(collection)) as Entry[];
+  let entries = (await knexClient.select("*").from(collection)) as Entry[];
+  return Util.sortEntries(entries);
 }
 
 export async function getEntriesByClientID(
@@ -62,7 +63,7 @@ export async function getEntriesByClientID(
     .where({
       clientID: `${id}`,
     })) as Entry[];
-  return entry;
+  return Util.sortEntries(entry);
 }
 
 export async function getEntriesByUserID(
@@ -75,7 +76,7 @@ export async function getEntriesByUserID(
     .where({
       userID: `${id}`,
     })) as Entry[];
-  return entry;
+  return Util.sortEntries(entry);
 }
 
 export async function getEntryByID(knexClient: Knex, id: id): Promise<Entry> {

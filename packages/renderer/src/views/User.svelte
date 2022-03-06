@@ -6,44 +6,28 @@
 
   import type User from "/type/database/User";
   import { Button, Column, Grid, Row } from "carbon-components-svelte";
-  import FormModal from "../components/forms/FormModal.svelte";
-  import UserDeleteForm from "../components/forms/UserDeleteForm.svelte";
 
   import Edit32 from "carbon-icons-svelte/lib/Edit32";
   import Delete32 from "carbon-icons-svelte/lib/Delete32";
   import UserForm from "../components/forms/UserForm.svelte";
+  import ModalHandler from "../components/forms/ModalHandler.svelte";
+  import type OpenModal from "/type/util/OpenModal";
+  import DeleteForm from "../components/forms/DeleteForm.svelte";
+  import DeletionTypes from "../../../../types/util/DeletionTypes";
 
   export let id: string;
   let user: User;
-  let openUserModal = false;
-  let openConfirmModal = false;
 
   onMount(() => getData(id));
   async function getData(id: string) {
     user = await ipc.invoke("getUserByID", id);
   }
   $: console.log(user);
+  let openModal: OpenModal;
 </script>
 
 {#if user != null}
-  <FormModal
-    bind:open={openUserModal}
-    heading="Add User"
-    form={UserForm}
-    props={{
-      defaultUser: user,
-    }}
-    on:reloadData={() => getData(id)}
-  />
-  <FormModal
-    bind:open={openConfirmModal}
-    heading="Confirm delete"
-    form={UserDeleteForm}
-    props={{
-      obj: user,
-    }}
-    on:reloadData={() => page("/users")}
-  />
+  <ModalHandler bind:openModal />
   <Grid>
     <Row style="padding: 1rem;">
       <Column style="padding:0;">
@@ -60,14 +44,27 @@
         />
       </Column>
       <Button
-        on:click={() => (openUserModal = true)}
+        on:click={() =>
+          openModal("Edit User", UserForm, { defaultUser: user }, () =>
+            getData(id)
+          )}
         iconDescription="Edit"
         kind="ghost"
         icon={Edit32}
         style="margin-top: 2rem; margin-bottom: 2rem;"
       />
       <Button
-        on:click={() => (openConfirmModal = true)}
+        on:click={() =>
+          openModal(
+            "Confirm Delete",
+            DeleteForm,
+            {
+              invoke: "deleteUser",
+              obj: user,
+              deletionType: DeletionTypes.User,
+            },
+            () => page("/users")
+          )}
         iconDescription="Delete"
         kind="ghost"
         icon={Delete32}
