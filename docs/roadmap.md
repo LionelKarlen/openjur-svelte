@@ -28,7 +28,7 @@
 - ~~add entry table invoice reference~~
 - add user feedback toasts
 - ~~summarise fixcosts on export~~
-- add fixcost text entry
+- ~~add fixcost text entry~~
 
 ### Bug Fixes
 
@@ -47,6 +47,7 @@
 
 - updater
 - add wages
+- localise language
 
 ### Bug Fixes
 

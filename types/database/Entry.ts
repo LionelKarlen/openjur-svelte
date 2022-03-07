@@ -10,4 +10,5 @@ export default interface Entry {
 	invoiceID?: id,
 	hours: number,
 	amount?: number,
+	fixcostText?: string,
 }
