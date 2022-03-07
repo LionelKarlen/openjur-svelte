@@ -16,6 +16,14 @@ export default function registerAmountHandlers(knexClient: Knex) {
   ipcMain.handle("updateWage", async (event, data) => {
     return await updatewage(knexClient, data);
   });
+
+  ipcMain.handle("getWagesByClientID", async (event, data: id) => {
+    return await getWagesByClientID(knexClient, data);
+  });
+
+  ipcMain.handle("getWage", async (event, clientID: id, userID: id) => {
+    return await getWage(knexClient, clientID, userID);
+  });
 }
 
 export async function getWagesByUserID(
@@ -27,6 +35,19 @@ export async function getWagesByUserID(
     .from(collection)
     .where({
       userID: `${id}`,
+    })) as Wage[];
+  return wage;
+}
+
+export async function getWagesByClientID(
+  knexClient: Knex,
+  id: id
+): Promise<Wage[]> {
+  let wage = (await knexClient
+    .select("*")
+    .from(collection)
+    .where({
+      clientID: `${id}`,
     })) as Wage[];
   return wage;
 }
