@@ -24,6 +24,11 @@ module.exports = {
       from: "res/db.sqlite",
       to: "defaultFiles/db.sqlite",
     },
+	{
+		from:"res/export/.gitkeep",
+		to:"export/.gitkeep",
+		filter:["**/*"]
+	}
   ],
   directories: {
     output: "dist",

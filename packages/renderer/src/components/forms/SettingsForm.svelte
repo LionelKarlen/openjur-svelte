@@ -13,6 +13,7 @@
 
   let settings: Settings;
   export const submit = () => {
+    console.log("submit");
     let obj: Settings = {
       MWST: mwst,
       clientTemplatePath: clientTemplateFiles[0].path,
@@ -24,8 +25,11 @@
       city: city,
       country: country,
       IBAN: iban,
-      runningYear: settings.runningYear,
-      runningInvoiceID: settings.runningInvoiceID,
+      runningYear:
+        settings != null
+          ? settings.runningYear
+          : new Date(Date.now()).getFullYear(),
+      runningInvoiceID: settings != null ? settings.runningInvoiceID : 0,
     };
     console.log(obj);
     ipc.invoke("setSettings", obj);
@@ -60,6 +64,7 @@
       country = settings.country;
       iban = settings.IBAN;
     }
+    validate();
   });
 
   export let isValid = false;
