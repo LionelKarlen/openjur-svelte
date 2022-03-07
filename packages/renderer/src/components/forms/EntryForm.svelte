@@ -5,7 +5,6 @@
     Dropdown,
     FormGroup,
     NumberInput,
-    TextInput,
     Toggle,
   } from "carbon-components-svelte";
   import { onMount } from "svelte";
