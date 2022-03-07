@@ -6,7 +6,7 @@ export default interface Entry {
 	clientID: id,
 	userID: id,
 	text: string,
-	fixedAmount?: number,
+	fixcostAmount?: number,
 	invoiceID?: id,
 	hours: number,
 	amount?: number,

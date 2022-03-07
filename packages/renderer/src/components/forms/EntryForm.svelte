@@ -42,7 +42,7 @@
       hours: hours,
       text: text,
       userID: userID,
-      fixedAmount: fixedAmount,
+      fixcostAmount: fixcostAmount,
       fixcostText: fixcostText,
       id: defaultEntry.id != null ? defaultEntry.id : null,
     };
@@ -56,7 +56,7 @@
 
   export let isValid = false;
   function validate() {
-    let isValidFixed = isFixed ? fixedAmount != null : true;
+    let isValidFixed = isFixed ? fixcostAmount != null : true;
     console.log("DEBUG");
     console.log("client", clientID);
     console.log("date", date);
@@ -84,9 +84,9 @@
       hours = defaultEntry.hours;
       text = defaultEntry.text;
       userID = defaultEntry.userID;
-      fixedAmount = defaultEntry.fixedAmount;
+      fixcostAmount = defaultEntry.fixcostAmount;
       fixcostText = defaultEntry.fixcostText;
-      isFixed = defaultEntry.fixedAmount > 0;
+      isFixed = defaultEntry.fixcostAmount > 0;
     } else {
       date = formatDate(Date.now() / 1000);
     }
@@ -112,7 +112,7 @@
   let hours: number;
   let text: string;
   let userID: string;
-  let fixedAmount: number;
+  let fixcostAmount: number;
   let fixcostText: string;
   let isFixed: boolean;
   export let defaultEntry: Entry = {
@@ -121,7 +121,8 @@
     hours: null,
     text: null,
     userID: null,
-    fixedAmount: null,
+    fixcostAmount: null,
+    fixcostText: null,
   };
   $: console.log(text);
 </script>
@@ -173,7 +174,7 @@
         placeholder="research"
         bind:suggestions={fixcostTextSuggestions}
       />
-      <NumberInput bind:value={fixedAmount} hideSteppers label="Amount" />
+      <NumberInput bind:value={fixcostAmount} hideSteppers label="Amount" />
     </FormGroup>
   {/if}
 </div>
