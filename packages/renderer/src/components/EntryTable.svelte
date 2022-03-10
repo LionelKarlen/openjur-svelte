@@ -12,16 +12,24 @@
   import EntryForm from "./forms/EntryForm.svelte";
   import DeleteForm from "./forms/DeleteForm.svelte";
   import DeletionTypes from "../../../../types/util/DeletionTypes";
+  import type {
+    DataTableHeader,
+    DataTableRow,
+  } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
+  import type id from "/type/util/Id";
 
   export let entries: Entry[];
-  export let headers;
-  export let id;
+  export let headers: DataTableHeader[];
+  export let id: id;
+  export let isUser: boolean = false;
   export let actionCallback: () => void;
   export let openModal: OpenModal;
-  let filteredEntries;
+  let filteredEntries: DataTableRow[];
   async function filter(array: Entry[]) {
-    let filteredArray = [];
-    let invoices = await ipc.invoke("getInvoicesByClientID", id);
+    let filteredArray: DataTableRow[] = [];
+    let invoices = isUser
+      ? await ipc.invoke("getInvoicesByUserID", id)
+      : await ipc.invoke("getInvoicesByClientID", id);
     for (const invoice of invoices) {
       let obj = {
         id: invoice.id,
@@ -59,6 +67,7 @@
       },
     ]}
     rows={filteredEntries}
+    expandedRowIds={["None"]}
     expandable
   >
     <svelte:fragment slot="expanded-row" let:row>

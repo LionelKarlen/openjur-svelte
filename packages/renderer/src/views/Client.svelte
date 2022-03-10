@@ -5,21 +5,13 @@
   import page from "page";
 
   import type Client from "/type/database/Client";
-  import {
-    Button,
-    Column,
-    DataTable,
-    DataTableSkeleton,
-    Grid,
-    Row,
-  } from "carbon-components-svelte";
+  import { Button, Column, Grid, Row } from "carbon-components-svelte";
   import ClientForm from "../components/forms/ClientForm.svelte";
   import EntryForm from "../components/forms/EntryForm.svelte";
 
   import Edit32 from "carbon-icons-svelte/lib/Edit32";
   import Delete32 from "carbon-icons-svelte/lib/Delete32";
   import type Entry from "/type/database/Entry";
-  import type { DataTableRow } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
   import ExportForm from "../components/forms/ExportForm.svelte";
   import ModalHandler from "../components/forms/ModalHandler.svelte";
   import type OpenModal from "/type/util/OpenModal";
@@ -140,50 +132,6 @@
           {headers}
           {id}
         />
-        <!-- {#if filteredEntries.length > 0}
-          <DataTable style="padding:0" {headers} rows={filteredEntries}>
-            <svelte:fragment slot="cell" let:cell let:row>
-              {#if cell.key === "actions"}
-                <Button
-                  on:click={async () => {
-                    entry = await ipc.invoke("getEntryByID", row.id);
-                    openModal(
-                      "Edit Entry",
-                      EntryForm,
-                      { id: id, defaultEntry: entry },
-                      () => {
-                        getData(id);
-                      }
-                    );
-                  }}
-                  iconDescription="Edit"
-                  kind="ghost"
-                  icon={Edit32}
-                />
-                <Button
-                  on:click={() => {
-                    openModal(
-                      "Confirm Delete",
-                      DeleteForm,
-                      {
-                        obj: row,
-                        invoke: "deleteEntry",
-                        deletionType: DeletionTypes.Entry,
-                      },
-                      () => getData(id)
-                    );
-                  }}
-                  iconDescription="Delete"
-                  kind="ghost"
-                  icon={Delete32}
-                />
-              {:else}{cell.value}{/if}
-            </svelte:fragment>
-          </DataTable>
-        {:else}
-          <h3>No data found.</h3>
-          <DataTableSkeleton showHeader={false} showToolbar={false} />
-        {/if} -->
         <Button
           on:click={() =>
             openModal(
