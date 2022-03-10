@@ -27,6 +27,7 @@
   import DeletionTypes from "../../../../types/util/DeletionTypes";
   import type Invoice from "/type/database/Invoice";
   import InvoiceRender from "../components/InvoiceRender.svelte";
+  import EntryTable from "../components/EntryTable.svelte";
 
   let headers = [
     {
@@ -65,9 +66,8 @@
 
   export let id: string;
   let client: Client;
-  let entry: Entry;
   let openModal: OpenModal;
-  let filteredEntries: DataTableRow[] = [];
+  let filteredEntries: Entry[] = [];
   let invoices: Invoice[] = [];
 
   onMount(() => getData(id));
@@ -133,7 +133,14 @@
     </Row>
     <Row style="padding:0">
       <Column style="padding:0">
-        {#if filteredEntries.length > 0}
+        <EntryTable
+          {openModal}
+          actionCallback={() => getData(id)}
+          bind:entries={filteredEntries}
+          {headers}
+          {id}
+        />
+        <!-- {#if filteredEntries.length > 0}
           <DataTable style="padding:0" {headers} rows={filteredEntries}>
             <svelte:fragment slot="cell" let:cell let:row>
               {#if cell.key === "actions"}
@@ -176,7 +183,7 @@
         {:else}
           <h3>No data found.</h3>
           <DataTableSkeleton showHeader={false} showToolbar={false} />
-        {/if}
+        {/if} -->
         <Button
           on:click={() =>
             openModal(

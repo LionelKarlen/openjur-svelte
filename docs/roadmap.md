@@ -26,7 +26,6 @@
 - ~~add entry actions~~
 - add entry table dropdown
 - ~~add entry table invoice reference~~
-- add user feedback toasts
 - ~~summarise fixcosts on export~~
 - ~~add fixcost text entry~~
 
@@ -48,6 +47,7 @@
 - updater
 - add wages
 - localise language
+- add user feedback toasts
 
 ### Bug Fixes
 
