@@ -73,11 +73,11 @@
   onMount(() => getData(id));
   async function getData(id: string) {
     client = await ipc.invoke("getClientByID", id);
+    invoices = await ipc.invoke("getInvoicesByClientID", id);
     filteredEntries = await ipc.invoke("calculateTable", {
       id: id,
       false: false,
     });
-    invoices = await ipc.invoke("getInvoicesByClientID", id);
   }
   $: console.log(client);
   $: console.log("entries", filteredEntries);

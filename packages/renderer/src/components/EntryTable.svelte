@@ -19,19 +19,38 @@
   export let actionCallback: () => void;
   export let openModal: OpenModal;
   let filteredEntries;
-  function filter(array: Entry[]) {
-    filteredEntries = array.filter((v) => v.invoiceID);
+  async function filter(array: Entry[]) {
+    let filteredArray = [];
+    let invoices = await ipc.invoke("getInvoicesByClientID", id);
+    for (const invoice of invoices) {
+      let obj = {
+        id: invoice.id,
+        extRef: invoice.extRef,
+        amount: invoice.amount,
+        entries: array.filter((v) => v.invoiceID == invoice.id),
+      };
+      filteredArray.push(obj);
+    }
+    let obj = {
+      id: "None",
+      extRef: "None",
+      amount: null,
+      entries: array.filter((v) => v.invoiceID == "N/A"),
+    };
+    filteredArray.push(obj);
+    console.log(filteredArray);
+    filteredEntries = filteredArray;
   }
 
   $: filter(entries);
 </script>
 
-{#if filteredEntries.length > 0}
+{#if entries.length > 0}
   <DataTable
     style="padding:0"
     headers={[
       {
-        key: "invoiceID",
+        key: "extRef",
         value: "Invoice",
       },
       {
@@ -39,20 +58,7 @@
         value: "Amount",
       },
     ]}
-    rows={[
-      {
-        id: "0",
-        invoiceID: "123123",
-        amount: 123,
-        entries: filteredEntries,
-      },
-      {
-        id: "1",
-        invoiceID: "adfds",
-        amount: 321,
-        entries: filteredEntries,
-      },
-    ]}
+    rows={filteredEntries}
     expandable
   >
     <svelte:fragment slot="expanded-row" let:row>

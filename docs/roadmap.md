@@ -24,7 +24,7 @@
 ### Features
 
 - ~~add entry actions~~
-- add entry table dropdown
+- ~~add entry table dropdown~~
 - ~~add entry table invoice reference~~
 - ~~summarise fixcosts on export~~
 - ~~add fixcost text entry~~
@@ -39,7 +39,7 @@
 - ~~refactor deletion modal~~
 - ~~fix deletion modal redirect on cancel~~
 - ~~fix entries sorting~~
-- fix update in validate invoice method
+- fix update datatable invoiceID after invoice created 
 # 0.6.0
 
 ### Features
