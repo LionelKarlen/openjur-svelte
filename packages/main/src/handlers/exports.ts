@@ -19,7 +19,7 @@ import { addInvoice } from "./invoices";
 
 export default function registerExportHandlers(knexClient: Knex) {
   ipcMain.handle("exportTable", async (event, data: ExportParams) => {
-    exportTable(knexClient, data);
+    return await exportTable(knexClient, data);
   });
 }
 
@@ -146,8 +146,6 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
       clientID: debtor.id,
       id: invoiceID,
     };
-    await addInvoice(knexClient, invoiceObject);
-
     for (let entry of initialEntries) {
       let updatedEntry = {
         ...entry,
@@ -155,6 +153,8 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
       };
       await updateEntry(knexClient, updatedEntry);
     }
+    await addInvoice(knexClient, invoiceObject);
     await openFiles(exportPath);
+    return success;
   }
 }

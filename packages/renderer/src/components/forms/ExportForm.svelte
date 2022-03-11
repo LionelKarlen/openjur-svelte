@@ -10,8 +10,7 @@
   let fromDate: string;
   let toDate: string;
 
-  export const submit = () => {
-    console.log("");
+  export const submit = async () => {
     let exportParams: ExportParams = {
       fromDate: simplifyDate(fromDate),
       toDate: simplifyDate(toDate),
@@ -19,7 +18,7 @@
       isUser: isUser,
     };
     console.log("exportParams", exportParams);
-    ipc.invoke("exportTable", exportParams);
+    await ipc.invoke("exportTable", exportParams);
   };
 
   export let isValid = false;

@@ -28,6 +28,7 @@
 - ~~add entry table invoice reference~~
 - ~~summarise fixcosts on export~~
 - ~~add fixcost text entry~~
+- add actions in invoice table
 
 ### Bug Fixes
 
@@ -39,7 +40,7 @@
 - ~~refactor deletion modal~~
 - ~~fix deletion modal redirect on cancel~~
 - ~~fix entries sorting~~
-- fix update datatable invoiceID after invoice created 
+- ~~fix update datatable invoiceID after invoice created~~
 # 0.6.0
 
 ### Features
