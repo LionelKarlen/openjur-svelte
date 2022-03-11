@@ -15,12 +15,21 @@ module.exports = {
     allowToChangeInstallationDirectory: true,
     oneClick: false,
   },
-	extraResources: [
-		{
-			from: "res/test.sqlite",
-			to: "defaultFiles/test.sqlite"
-		}
-	],
+  extraResources: [
+    {
+      from: "res/test.sqlite",
+      to: "defaultFiles/test.sqlite",
+    },
+    {
+      from: "res/db.sqlite",
+      to: "defaultFiles/db.sqlite",
+    },
+	{
+		from:"res/export/.gitkeep",
+		to:"export/.gitkeep",
+		filter:["**/*"]
+	}
+  ],
   directories: {
     output: "dist",
     buildResources: "buildResources",

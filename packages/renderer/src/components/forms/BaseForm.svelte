@@ -12,8 +12,8 @@
 </script>
 
 <Form
-  on:submit={() => {
-    submit();
+  on:submit={async () => {
+    await submit();
     dispatch("submit");
   }}
   novalidate={true}

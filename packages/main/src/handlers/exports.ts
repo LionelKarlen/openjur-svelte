@@ -19,7 +19,7 @@ import { addInvoice } from "./invoices";
 
 export default function registerExportHandlers(knexClient: Knex) {
   ipcMain.handle("exportTable", async (event, data: ExportParams) => {
-    exportTable(knexClient, data);
+    return await exportTable(knexClient, data);
   });
 }
 
@@ -51,10 +51,16 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
 
   let hoursTotal = 0;
   let chargeTotal = 0;
+  let charges = [];
   for (const entry of entries) {
     hoursTotal += entry.amount;
     if (entry.fixedAmount != "N/A") {
       chargeTotal += Number.parseInt(entry.fixedAmount.toString());
+      let obj = {
+        charge: entry.text,
+        amount: Number.parseInt(entry.fixedAmount.toString()),
+      };
+      charges.push(obj);
     }
   }
   let debtor = params.isUser
@@ -79,6 +85,7 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
   let exportObject: ExportData = {
     date: formatDate(date),
     entries: entries,
+    charges: Util.summariseFixcosts(charges),
     clientName: debtor.name,
     clientAddress: Util.formatAddress(debtor),
     mwst: `${mwst}%`,
@@ -93,8 +100,12 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
   };
   console.log("export", exportObject);
   let exportCreditor: Creditor = {
-    ...debtor,
-    account: "",
+    name: settings.data!.name,
+    address: settings.data!.address,
+    city: settings.data!.city,
+    zip: settings.data!.zip,
+    account: settings.data!.IBAN,
+    country: "ch",
   };
   let exportDebtor: Debtor = {
     ...debtor,
@@ -135,8 +146,6 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
       clientID: debtor.id,
       id: invoiceID,
     };
-    await addInvoice(knexClient, invoiceObject);
-
     for (let entry of initialEntries) {
       let updatedEntry = {
         ...entry,
@@ -144,6 +153,8 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
       };
       await updateEntry(knexClient, updatedEntry);
     }
+    await addInvoice(knexClient, invoiceObject);
     await openFiles(exportPath);
+    return success;
   }
 }

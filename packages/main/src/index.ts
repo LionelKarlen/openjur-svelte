@@ -29,9 +29,10 @@ let knexClient = knex({
   useNullAsDefault: true,
 });
 
-const adapter = new JSONFile<Settings>(
-  join(process.resourcesPath, "..", "..", "..", "..", "res", "settings.json")
-);
+let settingsPath = !isDevelopment
+  ? join(process.resourcesPath, "defaultFiles", "settings.json")
+  : join(process.resourcesPath, "..", "..", "..", "..", "res", "settings.json");
+const adapter = new JSONFile<Settings>(settingsPath);
 
 export const settings = new Low<Settings>(adapter);
 

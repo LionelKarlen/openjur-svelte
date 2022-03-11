@@ -5,28 +5,19 @@
   import page from "page";
 
   import type Client from "/type/database/Client";
-  import {
-    Button,
-    Column,
-    DataTable,
-    DataTableSkeleton,
-    Grid,
-    Row,
-  } from "carbon-components-svelte";
+  import { Button, Column, Grid, Row } from "carbon-components-svelte";
   import ClientForm from "../components/forms/ClientForm.svelte";
   import EntryForm from "../components/forms/EntryForm.svelte";
 
   import Edit32 from "carbon-icons-svelte/lib/Edit32";
   import Delete32 from "carbon-icons-svelte/lib/Delete32";
   import type Entry from "/type/database/Entry";
-  import type { DataTableRow } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
   import ExportForm from "../components/forms/ExportForm.svelte";
   import ModalHandler from "../components/forms/ModalHandler.svelte";
   import type OpenModal from "/type/util/OpenModal";
   import DeleteForm from "../components/forms/DeleteForm.svelte";
   import DeletionTypes from "../../../../types/util/DeletionTypes";
-  import type Invoice from "/type/database/Invoice";
-  import InvoiceRender from "../components/InvoiceRender.svelte";
+  import EntryTable from "../components/EntryTable.svelte";
 
   let headers = [
     {
@@ -65,10 +56,8 @@
 
   export let id: string;
   let client: Client;
-  let entry: Entry;
   let openModal: OpenModal;
-  let filteredEntries: DataTableRow[] = [];
-  let invoices: Invoice[] = [];
+  let filteredEntries: Entry[] = [];
 
   onMount(() => getData(id));
   async function getData(id: string) {
@@ -77,7 +66,6 @@
       id: id,
       false: false,
     });
-    invoices = await ipc.invoke("getInvoicesByClientID", id);
   }
   $: console.log(client);
   $: console.log("entries", filteredEntries);
@@ -133,50 +121,13 @@
     </Row>
     <Row style="padding:0">
       <Column style="padding:0">
-        {#if filteredEntries.length > 0}
-          <DataTable style="padding:0" {headers} rows={filteredEntries}>
-            <svelte:fragment slot="cell" let:cell let:row>
-              {#if cell.key === "actions"}
-                <Button
-                  on:click={async () => {
-                    entry = await ipc.invoke("getEntryByID", row.id);
-                    openModal(
-                      "Edit Entry",
-                      EntryForm,
-                      { id: id, defaultEntry: entry },
-                      () => {
-                        getData(id);
-                      }
-                    );
-                  }}
-                  iconDescription="Edit"
-                  kind="ghost"
-                  icon={Edit32}
-                />
-                <Button
-                  on:click={() => {
-                    openModal(
-                      "Confirm Delete",
-                      DeleteForm,
-                      {
-                        obj: row,
-                        invoke: "deleteEntry",
-                        deletionType: DeletionTypes.Entry,
-                      },
-                      () => getData(id)
-                    );
-                  }}
-                  iconDescription="Delete"
-                  kind="ghost"
-                  icon={Delete32}
-                />
-              {:else}{cell.value}{/if}
-            </svelte:fragment>
-          </DataTable>
-        {:else}
-          <h3>No data found.</h3>
-          <DataTableSkeleton showHeader={false} showToolbar={false} />
-        {/if}
+        <EntryTable
+          {openModal}
+          actionCallback={() => getData(id)}
+          bind:entries={filteredEntries}
+          {headers}
+          {id}
+        />
         <Button
           on:click={() =>
             openModal(
@@ -186,7 +137,7 @@
               () => getData(id)
             )}>Export</Button
         >
-        <Row style="margin:0">
+        <!-- <Row style="margin:0">
           {#each invoices as invoice}
             <div
               on:contextmenu|preventDefault={() =>
@@ -206,7 +157,7 @@
               <InvoiceRender {invoice} />
             </div>
           {/each}
-        </Row>
+        </Row> -->
       </Column>
     </Row>
   </Grid>

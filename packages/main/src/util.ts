@@ -20,4 +20,40 @@ ${debtor.country}`;
   static sortEntries(entries: Entry[]) {
     return entries.sort((a, b) => a.date - b.date);
   }
+
+  static summariseFixcosts(charges: any[]) {
+    let finalCharges = [];
+    for (const charge of charges) {
+      let times = charges.filter(
+        (v) => v.charge == charge.charge && v.amount == charge.amount
+      ).length;
+      let total = times * charge.amount;
+      finalCharges.push({
+        charge: charge.charge,
+        amount: charge.amount,
+        times: times,
+        totalAmount: total,
+      });
+    }
+    finalCharges = getUniqueValues(finalCharges);
+    return finalCharges;
+  }
+}
+
+function getUniqueValues(array: any[]) {
+  var filterArray = array.reduce((previous, current) => {
+    if (
+      !previous.some(
+        (item: any) =>
+          item.charge === current.charge &&
+          item.amount === current.amount &&
+          item.times === current.times &&
+          item.totalAmount === current.totalAmount
+      )
+    ) {
+      previous.push(current);
+    }
+    return previous;
+  }, []);
+  return filterArray;
 }

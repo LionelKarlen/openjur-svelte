@@ -7,6 +7,7 @@ export default interface ExportData {
   fromDate: string;
   toDate: string;
   entries: any[];
+  charges: any[];
   clientName: string; //client.name
   clientAddress: string; //formatted client.address
   mwst: string;

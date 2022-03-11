@@ -5,7 +5,6 @@
     Dropdown,
     FormGroup,
     NumberInput,
-    TextInput,
     Toggle,
   } from "carbon-components-svelte";
   import { onMount } from "svelte";
@@ -43,7 +42,8 @@
       hours: hours,
       text: text,
       userID: userID,
-      fixedAmount: fixedAmount,
+      fixcostAmount: fixcostAmount,
+      fixcostText: fixcostText,
       id: defaultEntry.id != null ? defaultEntry.id : null,
     };
     console.log("entry", entry);
@@ -56,7 +56,7 @@
 
   export let isValid = false;
   function validate() {
-    let isValidFixed = isFixed ? fixedAmount != null : true;
+    let isValidFixed = isFixed ? fixcostAmount != null : true;
     console.log("DEBUG");
     console.log("client", clientID);
     console.log("date", date);
@@ -84,13 +84,15 @@
       hours = defaultEntry.hours;
       text = defaultEntry.text;
       userID = defaultEntry.userID;
-      fixedAmount = defaultEntry.fixedAmount;
-      isFixed = defaultEntry.fixedAmount > 0;
+      fixcostAmount = defaultEntry.fixcostAmount;
+      fixcostText = defaultEntry.fixcostText;
+      isFixed = defaultEntry.fixcostAmount > 0;
     } else {
       date = formatDate(Date.now() / 1000);
     }
     let settings = await ipc.invoke("getSettings");
     entryTextSuggestions = settings.entryTextSuggestions;
+    fixcostTextSuggestions = settings.fixcostTextSuggestions;
     clients = await ipc.invoke("getClients");
     users = await ipc.invoke("getUsers");
     clients.map((value: Client, i: number) => {
@@ -103,13 +105,15 @@
   $: console.log(selectedClientIndex);
 
   let entryTextSuggestions = [];
+  let fixcostTextSuggestions = [];
 
   let clientID: string;
   let date: string;
   let hours: number;
   let text: string;
   let userID: string;
-  let fixedAmount: number;
+  let fixcostAmount: number;
+  let fixcostText: string;
   let isFixed: boolean;
   export let defaultEntry: Entry = {
     clientID: null,
@@ -117,7 +121,8 @@
     hours: null,
     text: null,
     userID: null,
-    fixedAmount: null,
+    fixcostAmount: null,
+    fixcostText: null,
   };
   $: console.log(text);
 </script>
@@ -156,7 +161,6 @@
       bind:suggestions={entryTextSuggestions}
       placeholder="research"
     />
-    <!-- <TextInput bind:value={text} labelText="Text" placeholder="Research" /> -->
     <NumberInput bind:value={hours} hideSteppers label="Hours" />
   </FormGroup>
   <FormGroup>
@@ -164,8 +168,13 @@
   </FormGroup>
   {#if isFixed}
     <FormGroup>
-      <TextInput bind:value={text} labelText="Text" placeholder="Research" />
-      <NumberInput bind:value={fixedAmount} hideSteppers label="Amount" />
+      <Autocomplete
+        bind:value={fixcostText}
+        labelText="Text"
+        placeholder="research"
+        bind:suggestions={fixcostTextSuggestions}
+      />
+      <NumberInput bind:value={fixcostAmount} hideSteppers label="Amount" />
     </FormGroup>
   {/if}
 </div>
