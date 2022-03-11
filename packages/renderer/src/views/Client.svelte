@@ -17,8 +17,6 @@
   import type OpenModal from "/type/util/OpenModal";
   import DeleteForm from "../components/forms/DeleteForm.svelte";
   import DeletionTypes from "../../../../types/util/DeletionTypes";
-  import type Invoice from "/type/database/Invoice";
-  import InvoiceRender from "../components/InvoiceRender.svelte";
   import EntryTable from "../components/EntryTable.svelte";
 
   let headers = [
@@ -60,12 +58,10 @@
   let client: Client;
   let openModal: OpenModal;
   let filteredEntries: Entry[] = [];
-  let invoices: Invoice[] = [];
 
   onMount(() => getData(id));
   async function getData(id: string) {
     client = await ipc.invoke("getClientByID", id);
-    invoices = await ipc.invoke("getInvoicesByClientID", id);
     filteredEntries = await ipc.invoke("calculateTable", {
       id: id,
       false: false,
