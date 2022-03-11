@@ -141,7 +141,7 @@
               () => getData(id)
             )}>Export</Button
         >
-        <Row style="margin:0">
+        <!-- <Row style="margin:0">
           {#each invoices as invoice}
             <div
               on:contextmenu|preventDefault={() =>
@@ -161,7 +161,7 @@
               <InvoiceRender {invoice} />
             </div>
           {/each}
-        </Row>
+        </Row> -->
       </Column>
     </Row>
   </Grid>

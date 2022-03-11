@@ -28,7 +28,7 @@
 - ~~add entry table invoice reference~~
 - ~~summarise fixcosts on export~~
 - ~~add fixcost text entry~~
-- add actions in invoice table
+- ~~add actions in invoice table~~
 
 ### Bug Fixes
 

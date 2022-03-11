@@ -8,7 +8,7 @@
 
   import type Entry from "/type/database/Entry";
   import type OpenModal from "/type/util/OpenModal";
-  import { Edit32, Delete32 } from "carbon-icons-svelte";
+  import { Edit32, Delete32, Document32 } from "carbon-icons-svelte";
   import EntryForm from "./forms/EntryForm.svelte";
   import DeleteForm from "./forms/DeleteForm.svelte";
   import DeletionTypes from "../../../../types/util/DeletionTypes";
@@ -17,6 +17,7 @@
     DataTableRow,
   } from "carbon-components-svelte/types/DataTable/DataTable.svelte";
   import type id from "/type/util/Id";
+  import type Invoice from "/type/database/Invoice";
 
   export let entries: Entry[];
   export let headers: DataTableHeader[];
@@ -27,14 +28,16 @@
   let filteredEntries: DataTableRow[];
   async function filter(array: Entry[]) {
     let filteredArray: DataTableRow[] = [];
-    let invoices = isUser
+    let invoices: Invoice[] = isUser
       ? await ipc.invoke("getInvoicesByUserID", id)
       : await ipc.invoke("getInvoicesByClientID", id);
     for (const invoice of invoices) {
       let obj = {
         id: invoice.id,
+        invoice: invoice,
         extRef: invoice.extRef,
         amount: invoice.amount,
+        actions: " ",
         entries: array.filter((v) => v.invoiceID == invoice.id),
       };
       filteredArray.push(obj);
@@ -42,7 +45,9 @@
     let obj = {
       id: "None",
       extRef: "None",
-      amount: null,
+      amount: "",
+      actions: "",
+      invoice: null,
       entries: array.filter((v) => v.invoiceID == "N/A"),
     };
     filteredArray.push(obj);
@@ -64,12 +69,46 @@
       {
         key: "amount",
         value: "Amount",
+        display: (amount) => `${amount}CHF`,
+      },
+      {
+        key: "actions",
+        value: "Actions",
       },
     ]}
     rows={filteredEntries}
     expandedRowIds={["None"]}
     expandable
   >
+    <svelte:fragment slot="cell" let:cell let:row>
+      {#if cell.key === "actions" && row.id != "None"}
+        <Button
+          on:click={async () => {
+            ipc.invoke("openFiles", row.invoice.path);
+          }}
+          iconDescription="Open"
+          kind="ghost"
+          icon={Document32}
+        />
+        <Button
+          on:click={() => {
+            openModal(
+              "Confirm Delete",
+              DeleteForm,
+              {
+                obj: row.invoice,
+                invoke: "deleteInvoice",
+                deletionType: DeletionTypes.Invoice,
+              },
+              actionCallback
+            );
+          }}
+          iconDescription="Delete"
+          kind="ghost"
+          icon={Delete32}
+        />
+      {:else}{cell.value}{/if}
+    </svelte:fragment>
     <svelte:fragment slot="expanded-row" let:row>
       <DataTable style="padding:0" {headers} rows={row.entries}>
         <svelte:fragment slot="cell" let:cell let:row>
