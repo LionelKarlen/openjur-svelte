@@ -6,7 +6,7 @@ import QRData from "../../../../types/export/QRdata";
 import Settings from "/type/database/Settings";
 import Docxtemplater from "docxtemplater";
 const pizzip = require("pizzip");
-// import { PDF } from "swissqrbill";
+const swissqrbill = require("swissqrbill");
 
 export default function registerFileHandlers() {
   ipcMain.handle("openFiles", async (event, data: string) => {
@@ -79,6 +79,6 @@ export async function writeToFile(
     type: "nodebuffer",
   });
   fs.writeFile(`${path}.docx`, buf);
-  //   let pdf = new PDF(qrData, `${path}.pdf`); //TODO: Add pdf export
+  let pdf = new swissqrbill.PDF(qrData, `${path}.pdf`);
   return true;
 }
