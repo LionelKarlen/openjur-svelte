@@ -100,8 +100,12 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
   };
   console.log("export", exportObject);
   let exportCreditor: Creditor = {
-    ...debtor,
-    account: "",
+    name: settings.data!.name,
+    address: settings.data!.address,
+    city: settings.data!.city,
+    zip: settings.data!.zip,
+    account: settings.data!.IBAN,
+    country: "ch",
   };
   let exportDebtor: Debtor = {
     ...debtor,

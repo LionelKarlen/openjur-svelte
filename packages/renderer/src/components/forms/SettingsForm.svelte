@@ -23,8 +23,8 @@
       address: address,
       zip: zip,
       city: city,
-      country: country,
       IBAN: iban,
+      name: name,
       runningYear:
         settings != null
           ? settings.runningYear
@@ -61,7 +61,7 @@
       address = settings.address;
       zip = settings.zip;
       city = settings.city;
-      country = settings.country;
+      name = settings.name;
       iban = settings.IBAN;
     }
     validate();
@@ -76,7 +76,6 @@
       address.length > 0 &&
       zip > 0 &&
       city.length > 0 &&
-      country.length > 0 &&
       iban.length > 0;
   }
 
@@ -88,8 +87,8 @@
   let address = "";
   let zip = 0;
   let city = "";
-  let country = "";
   let iban = "";
+  let name = "";
 </script>
 
 <div on:change={() => validate()}>
@@ -129,7 +128,12 @@
     <TextInput
       bind:value={iban}
       labelText="IBAN"
-      placeholder="CHXX XXXX XXXX XXXX XXXX X"
+      placeholder="CHXXXXXXXXXXXXXXXXXXX"
+    />
+    <TextInput
+      bind:value={name}
+      labelText="Name"
+      placeholder="Max Mustermann"
     />
     <TextInput
       bind:value={address}
@@ -138,8 +142,6 @@
     />
     <NumberInput bind:value={zip} hideSteppers label="Zip" />
     <TextInput bind:value={city} labelText="City" placeholder="Zürich" />
-
-    <TextInput bind:value={country} labelText="Country" placeholder="CH" />
   </FormGroup>
 </div>
 

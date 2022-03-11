@@ -8,7 +8,7 @@
       name: name,
       address: address,
       city: city,
-      country: country,
+      country: "ch",
       zip: zip,
       id: defaultClient.id != null ? defaultClient.id : null,
     };
@@ -24,7 +24,6 @@
     name = null;
     address = null;
     city = null;
-    country = null;
     zip = 0;
     isValid = false;
   };
@@ -33,11 +32,10 @@
   let address: string;
   let zip: number;
   let city: string;
-  let country: string;
   export let defaultClient: Client = {
     address: null,
     city: null,
-    country: null,
+    country: "ch",
     name: null,
     zip: 0,
     id: null,
@@ -48,7 +46,6 @@
       address = defaultClient.address;
       zip = defaultClient.zip;
       city = defaultClient.city;
-      country = defaultClient.country;
     }
     validate();
   });
@@ -56,11 +53,7 @@
   export let isValid = false;
   function validate() {
     if (name != null) {
-      isValid =
-        name.length > 0 &&
-        address.length > 0 &&
-        city.length > 0 &&
-        country.length > 0;
+      isValid = name.length > 0 && address.length > 0 && city.length > 0;
     }
   }
 </script>
@@ -81,7 +74,5 @@
     />
     <NumberInput bind:value={zip} hideSteppers label="Zip" />
     <TextInput bind:value={city} labelText="City" placeholder="Zürich" />
-
-    <TextInput bind:value={country} labelText="Country" placeholder="CH" />
   </FormGroup>
 </div>
