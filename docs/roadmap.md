@@ -55,3 +55,5 @@
 
 - fix icon
 - fix headers
+- fix default user in entry form
+- fix allow delete user/client if entry exists
