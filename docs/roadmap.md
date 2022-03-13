@@ -49,7 +49,9 @@
 - add wages
 - localise language
 - add user feedback toasts
+- add unbilled entries page
 
 ### Bug Fixes
 
 - fix icon
+- fix headers

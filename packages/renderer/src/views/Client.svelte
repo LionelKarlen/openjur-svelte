@@ -18,6 +18,8 @@
   import DeleteForm from "../components/forms/DeleteForm.svelte";
   import DeletionTypes from "../../../../types/util/DeletionTypes";
   import EntryTable from "../components/EntryTable.svelte";
+  import WageForm from "../components/forms/WageForm.svelte";
+  import { CurrencyDollar32 } from "carbon-icons-svelte";
 
   let headers = [
     {
@@ -91,6 +93,14 @@
         style="margin-top: 2rem; margin-bottom: 2rem;margin-right:2rem;padding-right: 15px;"
         >New Entry</Button
       >
+      <Button
+        on:click={() =>
+          openModal("Edit Wages", WageForm, { id: id }, () => getData(id))}
+        iconDescription="Wage"
+        kind="ghost"
+        icon={CurrencyDollar32}
+        style="margin-top: 2rem; margin-bottom: 2rem;"
+      />
       <Button
         on:click={() =>
           openModal("Edit Client", ClientForm, { defaultClient: client }, () =>
