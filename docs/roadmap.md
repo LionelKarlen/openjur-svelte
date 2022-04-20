@@ -53,7 +53,7 @@
 
 - fix icon
 - fix headers
-- fix default user in entry form
+- ~~fix default user in entry form~~
 - fix allow delete user/client if entry exists
 
 # 0.7.0
