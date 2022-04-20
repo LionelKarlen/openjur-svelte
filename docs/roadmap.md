@@ -53,7 +53,7 @@
 ### Bug Fixes
 
 - fix icon
-- fix headers
+- ~~fix headers~~
 - ~~fix default user in entry form~~
 - ~~fix allow delete user/client if entry exists~~
 

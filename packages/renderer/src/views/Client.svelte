@@ -39,16 +39,20 @@
       value: "Hours",
     },
     {
-      key: "amount",
-      value: "Amount",
+      key: "hoursAmount",
+      value: "Hours amount",
+    },
+    {
+      key: "fixedText",
+      value: "Fixed text",
     },
     {
       key: "fixedAmount",
-      value: "FixedAmount",
+      value: "Fixed amount",
     },
     {
-      key: "invoiceID",
-      value: "InvoiceID",
+      key: "amount",
+      value: "Total amount",
     },
     {
       key: "actions",

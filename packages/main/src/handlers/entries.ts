@@ -133,9 +133,13 @@ export async function calculateTable(knexClient: Knex, entries: Entry[]) {
       user: user.name,
       text: value.text,
       hours: value.hours,
+      hoursAmount: value.hours * amount,
       invoiceID: value.invoiceID ? value.invoiceID : "N/A",
-      amount: amount * value.hours,
-      fixedAmount: value.fixcostAmount ? value.fixcostAmount : "N/A",
+      fixedText: value.fixcostText ? value.fixcostText : "",
+      amount:
+        amount * value.hours +
+        (value.fixcostAmount != null ? value.fixcostAmount : 0),
+      fixedAmount: value.fixcostAmount ? value.fixcostAmount : "",
     });
   }
   console.log("filtered", filtered);
