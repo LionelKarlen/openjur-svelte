@@ -47,7 +47,7 @@
 
 - ~~add wages~~
 - add user feedback toasts
-- add unbilled entries page
+- ~~add unbilled entries page~~
 - add client page table/actions
 
 ### Bug Fixes

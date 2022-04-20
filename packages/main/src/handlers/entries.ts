@@ -47,6 +47,12 @@ export default function registerEntryHandlers(knexClient: Knex) {
   ipcMain.handle("deleteEntry", async (event, data: id) => {
     return await deleteEntry(knexClient, data);
   });
+
+  ipcMain.handle("calculateUnbilledEntries", async (event) => {
+    let entries = await getUnbilledEntries(knexClient);
+    console.log("unbilled", entries);
+    return await calculateTable(knexClient, entries);
+  });
 }
 
 export async function getEntries(knexClient: Knex): Promise<Entry[]> {
@@ -77,6 +83,13 @@ export async function getEntriesByUserID(
     .where({
       userID: `${id}`,
     })) as Entry[];
+  return Util.sortEntries(entry);
+}
+
+export async function getUnbilledEntries(knexClient: Knex): Promise<Entry[]> {
+  let entry = (await knexClient.select("*").from(collection).where({
+    invoiceID: null,
+  })) as Entry[];
   return Util.sortEntries(entry);
 }
 
