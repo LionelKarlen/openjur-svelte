@@ -3,6 +3,7 @@ import { Knex } from "knex";
 import type id from "../../../../types/util/Id";
 import type User from "/type/database/User";
 import Util from "../util";
+import { getEntriesByUserID } from "./entries";
 const collection = "users";
 
 export default function registerUserHandlers(knexClient: Knex) {
@@ -60,6 +61,9 @@ export async function updateUser(knexClient: Knex, User: User) {
 }
 
 export async function deleteUser(knexClient: Knex, id: id) {
+  if ((await getEntriesByUserID(knexClient, id)).length != 0) {
+    return;
+  }
   await knexClient
     .table(collection)
     .where({

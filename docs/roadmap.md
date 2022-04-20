@@ -48,13 +48,14 @@
 - ~~add wages~~
 - add user feedback toasts
 - add unbilled entries page
+- add client page table/actions
 
 ### Bug Fixes
 
 - fix icon
 - fix headers
 - ~~fix default user in entry form~~
-- fix allow delete user/client if entry exists
+- ~~fix allow delete user/client if entry exists~~
 
 # 0.7.0
 
