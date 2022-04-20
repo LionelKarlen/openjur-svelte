@@ -45,7 +45,7 @@
 
 ### Features
 
-- add wages
+- ~~add wages~~
 - add user feedback toasts
 - add unbilled entries page
 

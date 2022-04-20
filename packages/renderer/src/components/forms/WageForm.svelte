@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, Dropdown, FormGroup, Row } from "carbon-components-svelte";
+  import { Button, FormGroup, Row } from "carbon-components-svelte";
   import { onMount } from "svelte";
   import ipc from "/@/services/ipcService";
   import type id from "/type/util/Id";
@@ -14,7 +14,7 @@
     console.log("submit");
     console.log("wages", wages);
     for (const wage of wages) {
-      ipc.invoke("");
+      ipc.invoke("addWage", wage);
     }
   };
 
@@ -34,18 +34,21 @@
   }
   async function getData() {
     wages = await ipc.invoke("getWagesByClientID", id);
+    console.log("wages", wages);
   }
 
   onMount(async () => {
     await getData();
-    filterUsers();
+    await filterUsers();
     validate();
   });
 
   async function filterUsers() {
     users = await ipc.invoke("getUsers");
+    console.log("users", users);
 
     possibleUsers = users.filter((v) => !wages.some((u) => u.userID == v.id));
+    console.log("poss", possibleUsers);
   }
 </script>
 
@@ -66,12 +69,14 @@
     </Row>
   </FormGroup>
   <div class="wrapper">
-    {#each wages as wage}
-      <WageSetter
-        bind:wage
-        bind:users={possibleUsers}
-        user={users.find((v) => v.id == wage.userID)}
-      />
-    {/each}
+    {#if users.length > 0}
+      {#each wages as wage}
+        <WageSetter
+          bind:wage
+          bind:users={possibleUsers}
+          user={users.find((v) => v.id == wage.userID)}
+        />
+      {/each}
+    {/if}
   </div>
 </div>

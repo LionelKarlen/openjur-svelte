@@ -6,6 +6,7 @@ import Util from "../util";
 import { formatDate } from "../../../renderer/src/services/util";
 import { getClientByID } from "./clients";
 import { getUserByID } from "./users";
+import { getWage, getWagesByUserID } from "./wages";
 const collection = "entries";
 
 export default function registerEntryHandlers(knexClient: Knex) {
@@ -123,6 +124,8 @@ export async function calculateTable(knexClient: Knex, entries: Entry[]) {
     let client = await getClientByID(knexClient, value.clientID);
     let user = await getUserByID(knexClient, value.userID);
     console.log("user", user);
+    let wage = await getWage(knexClient, value.clientID, value.userID);
+    let amount = wage != null ? wage.amount : user.baseWage;
     filtered.push({
       id: value.id,
       date: formatDate(value.date),
@@ -131,7 +134,7 @@ export async function calculateTable(knexClient: Knex, entries: Entry[]) {
       text: value.text,
       hours: value.hours,
       invoiceID: value.invoiceID ? value.invoiceID : "N/A",
-      amount: user.baseWage * value.hours,
+      amount: amount * value.hours,
       fixedAmount: value.fixcostAmount ? value.fixcostAmount : "N/A",
     });
   }
