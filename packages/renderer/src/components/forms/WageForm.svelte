@@ -33,7 +33,9 @@
     isValid = valid;
   }
   async function getData() {
-    wages = await ipc.invoke("getWagesByClientID", id);
+    wages = isUser
+      ? await ipc.invoke("getWagesByUserID", id)
+      : await ipc.invoke("getWagesByClientID", id);
     console.log("wages", wages);
   }
 
@@ -44,10 +46,14 @@
   });
 
   async function filterUsers() {
-    users = await ipc.invoke("getUsers");
+    users = isUser
+      ? await ipc.invoke("getClients")
+      : await ipc.invoke("getUsers");
     console.log("users", users);
 
-    possibleUsers = users.filter((v) => !wages.some((u) => u.userID == v.id));
+    possibleUsers = isUser
+      ? users.filter((v) => !wages.some((u) => u.clientID == v.id))
+      : users.filter((v) => !wages.some((u) => u.userID == v.id));
     console.log("poss", possibleUsers);
   }
 </script>
@@ -61,7 +67,9 @@
         iconDescription="Add wage"
         icon={Add32}
         on:click={() => {
-          let obj = { clientID: id, userID: possibleUsers[0].id, amount: 0 };
+          let obj = isUser
+            ? { userID: id, clientID: possibleUsers[0].id, amount: 0 }
+            : { clientID: id, userID: possibleUsers[0].id, amount: 0 };
           wages.push(obj);
           filterUsers();
         }}
@@ -74,7 +82,9 @@
         <WageSetter
           bind:wage
           bind:users={possibleUsers}
-          user={users.find((v) => v.id == wage.userID)}
+          user={isUser
+            ? users.find((v) => v.id == wage.clientID)
+            : users.find((v) => v.id == wage.userID)}
         />
       {/each}
     {/if}

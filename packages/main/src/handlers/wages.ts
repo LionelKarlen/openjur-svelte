@@ -53,7 +53,18 @@ export async function getWagesByClientID(
 }
 
 export async function addWage(knexClient: Knex, wage: Wage) {
-  await knexClient.table(collection).insert(wage);
+  if (
+    (
+      await knexClient.table(collection).where({
+        userID: `${wage.userID}`,
+        clientID: `${wage.clientID}`,
+      })
+    ).length > 0
+  ) {
+    await updatewage(knexClient, wage);
+  } else {
+    await knexClient.table(collection).insert(wage);
+  }
 }
 
 export async function updatewage(knexClient: Knex, wage: Wage) {

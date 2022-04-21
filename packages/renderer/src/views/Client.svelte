@@ -51,10 +51,6 @@
       value: "Fixed amount",
     },
     {
-      key: "amount",
-      value: "Total amount",
-    },
-    {
       key: "actions",
       value: "Actions",
     },
@@ -70,7 +66,7 @@
     client = await ipc.invoke("getClientByID", id);
     filteredEntries = await ipc.invoke("calculateTable", {
       id: id,
-      false: false,
+      isUser: false,
     });
   }
   $: console.log(client);
