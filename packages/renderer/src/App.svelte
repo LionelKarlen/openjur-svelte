@@ -4,6 +4,7 @@
   import "carbon-components-svelte/css/g10.css";
   import { Content, Grid, Tab, Tabs } from "carbon-components-svelte";
   import page from "page";
+  import NotificationHandler from "./components/NotificationHandler.svelte";
 
   let tabs = [
     {
@@ -34,5 +35,6 @@
     <Grid>
       <Router />
     </Grid>
+    <NotificationHandler />
   </Content>
 </main>

@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { ElectronApi } from "types/electron-api";
 import * as path from "path";
+import NotificationData from "../../../types/util/NotificationData";
 
 const apiKey = "electron";
 /**
@@ -10,6 +11,10 @@ const api: ElectronApi = {
   versions: process.versions,
   ipc: ipcRenderer,
   path: path,
+  onNotify: (cb: (notification: NotificationData) => void) =>
+    ipcRenderer.on("sendNotification", (_event, notification) =>
+      cb(notification)
+    ),
 };
 
 /**

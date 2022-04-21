@@ -36,6 +36,8 @@ const adapter = new JSONFile<Settings>(settingsPath);
 
 export const settings = new Low<Settings>(adapter);
 
+export let webContentsHandler: Electron.WebContents;
+
 registerHandlers(knexClient);
 let mainWindow: BrowserWindow | null = null;
 
@@ -47,6 +49,8 @@ const createWindow = async () => {
       preload: join(__dirname, "../../preload/dist/index.cjs"),
     },
   });
+
+  webContentsHandler = mainWindow.webContents;
 
   mainWindow.setMenuBarVisibility(false);
 
