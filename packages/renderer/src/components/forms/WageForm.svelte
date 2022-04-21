@@ -37,11 +37,11 @@
       ? await ipc.invoke("getWagesByUserID", id)
       : await ipc.invoke("getWagesByClientID", id);
     console.log("wages", wages);
+    await filterUsers();
   }
 
   onMount(async () => {
     await getData();
-    await filterUsers();
     validate();
   });
 
@@ -80,6 +80,7 @@
     {#if users.length > 0}
       {#each wages as wage}
         <WageSetter
+          on:reload={() => getData()}
           bind:wage
           bind:users={possibleUsers}
           user={isUser

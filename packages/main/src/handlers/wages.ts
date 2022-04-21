@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { Knex } from "knex";
 import type id from "../../../../types/util/Id";
-import type Wage from "/type/database/Wage";
+import Wage from "../../../../types/database/Wage";
 const collection = "wages";
 
 export default function registerAmountHandlers(knexClient: Knex) {
@@ -19,6 +19,10 @@ export default function registerAmountHandlers(knexClient: Knex) {
 
   ipcMain.handle("getWagesByClientID", async (event, data: id) => {
     return await getWagesByClientID(knexClient, data);
+  });
+
+  ipcMain.handle("deleteWage", async (event, data: Wage) => {
+    return await deleteWage(knexClient, data);
   });
 
   ipcMain.handle("getWage", async (event, clientID: id, userID: id) => {
@@ -82,6 +86,16 @@ export async function deleteWageByClientID(knexClient: Knex, id: id) {
     .table(collection)
     .where({
       clientID: `${id}`,
+    })
+    .delete();
+}
+
+export async function deleteWage(knexClient: Knex, wage: Wage) {
+  await knexClient
+    .table(collection)
+    .where({
+      clientID: `${wage.clientID}`,
+      userID: `${wage.userID}`,
     })
     .delete();
 }
