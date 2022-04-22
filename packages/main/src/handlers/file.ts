@@ -84,33 +84,48 @@ export async function writeToFile(
   path: string,
   isUser = false
 ): Promise<boolean> {
-  let templatePath = isUser
-    ? settings.userTemplatePath
-    : settings.clientTemplatePath;
-  let content = await fs.readFile(templatePath, "binary");
-  let zip = new pizzip(content);
-  let doc;
   try {
-    doc = new Docxtemplater(zip, { linebreaks: true });
-  } catch (error) {
-    console.log(error);
-  }
+    let templatePath = isUser
+      ? settings.userTemplatePath
+      : settings.clientTemplatePath;
+    let content = await fs.readFile(templatePath, "binary");
+    let zip = new pizzip(content);
+    let doc;
+    try {
+      doc = new Docxtemplater(zip, { linebreaks: true });
+    } catch (error) {
+      console.log(error);
+    }
 
-  doc?.setData(exportData);
+    doc?.setData(exportData);
 
-  try {
-    doc?.render();
-  } catch (error) {
-    console.log(error);
+    try {
+      doc?.render();
+    } catch (error) {
+      console.log(error);
+    }
+    let buf = doc?.getZip().generate({
+      type: "nodebuffer",
+    });
+    fs.writeFile(`${path}.docx`, buf);
+    let pdf = new swissqrbill.PDF(qrData, `${path}.pdf`);
+    notify({
+      text: "File written",
+      type: NotificationType.SUCCESS,
+    });
+    return true;
+  } catch (e) {
+    let x = "";
+    if (typeof e === "string") {
+      x = e.toUpperCase(); // works, `e` narrowed to string
+    } else if (e instanceof Error) {
+      x = e.message; // works, `e` narrowed to Error
+    }
+
+    notify({
+      text: x,
+      type: NotificationType.ERROR,
+    });
+    return false;
   }
-  let buf = doc?.getZip().generate({
-    type: "nodebuffer",
-  });
-  fs.writeFile(`${path}.docx`, buf);
-  let pdf = new swissqrbill.PDF(qrData, `${path}.pdf`);
-  notify({
-    text: "File written",
-    type: NotificationType.SUCCESS,
-  });
-  return true;
 }
