@@ -21,14 +21,18 @@ module.exports = {
       to: "defaultFiles/test.sqlite",
     },
     {
+      from: "res/defaultSettings.json",
+      to: "defaultFiles/settings.json",
+    },
+    {
       from: "res/db.sqlite",
       to: "defaultFiles/db.sqlite",
     },
-	{
-		from:"res/export/.gitkeep",
-		to:"export/.gitkeep",
-		filter:["**/*"]
-	}
+    {
+      from: "res/export/.gitkeep",
+      to: "export/.gitkeep",
+      filter: ["**/*"],
+    },
   ],
   directories: {
     output: "dist",
