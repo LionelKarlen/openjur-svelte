@@ -54,7 +54,7 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
   let charges = [];
   for (const entry of entries) {
     hoursTotal += entry.amount;
-    if (entry.fixedAmount != "N/A") {
+    if (entry.fixedAmount != "") {
       chargeTotal += Number.parseInt(entry.fixedAmount.toString());
       let obj = {
         charge: entry.text,

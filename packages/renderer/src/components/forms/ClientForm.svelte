@@ -8,7 +8,7 @@
       name: name,
       address: address,
       city: city,
-      country: "ch",
+      country: "CH",
       zip: zip,
       id: defaultClient.id != null ? defaultClient.id : null,
     };
