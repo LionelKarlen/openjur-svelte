@@ -4,6 +4,8 @@ import type id from "../../../../types/util/Id";
 import type Client from "/type/database/Client";
 import Util from "../util";
 import { getEntriesByClientID } from "./entries";
+import { notify } from "./notifications";
+import NotificationType from "../../../../types/util/NotificationType";
 const collection = "Clients";
 
 export default function registerClientHandlers(knexClient: Knex) {
@@ -58,10 +60,18 @@ export async function updateClient(knexClient: Knex, client: Client) {
       id: `${client.id}`,
     })
     .update(client);
+  notify({
+    text: "Client updated",
+    type: NotificationType.SUCCESS,
+  });
 }
 
 export async function deleteClient(knexClient: Knex, id: id) {
   if ((await getEntriesByClientID(knexClient, id)).length != 0) {
+    notify({
+      text: "There are still entries for this Client",
+      type: NotificationType.ERROR,
+    });
     return;
   }
   await knexClient

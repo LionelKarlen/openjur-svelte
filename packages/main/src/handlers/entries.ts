@@ -6,7 +6,7 @@ import Util from "../util";
 import { formatDate } from "../../../renderer/src/services/util";
 import { getClientByID } from "./clients";
 import { getUserByID } from "./users";
-import { getWage, getWagesByUserID } from "./wages";
+import { getWage } from "./wages";
 const collection = "entries";
 
 export default function registerEntryHandlers(knexClient: Knex) {

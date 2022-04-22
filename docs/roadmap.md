@@ -46,7 +46,7 @@
 ### Features
 
 - ~~add wages~~
-- add user feedback toasts
+- ~~add user feedback toasts~~
 - ~~add unbilled entries page~~
 - ~~add client page table/actions~~
 - ~~add wage delete~~
