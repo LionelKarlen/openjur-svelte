@@ -14,16 +14,61 @@
   import type OpenModal from "/type/util/OpenModal";
   import DeleteForm from "../components/forms/DeleteForm.svelte";
   import DeletionTypes from "../../../../types/util/DeletionTypes";
+  import EntryTable from "../components/EntryTable.svelte";
+  import ExportForm from "../components/forms/ExportForm.svelte";
+  import type Entry from "/type/database/Entry";
+  import WageForm from "../components/forms/WageForm.svelte";
+  import { CurrencyDollar32 } from "carbon-icons-svelte";
 
   export let id: string;
   let user: User;
+  let filteredEntries: Entry[] = [];
 
   onMount(() => getData(id));
   async function getData(id: string) {
     user = await ipc.invoke("getUserByID", id);
+    filteredEntries = await ipc.invoke("calculateTable", {
+      id: id,
+      isUser: true,
+    });
   }
   $: console.log(user);
   let openModal: OpenModal;
+
+  let headers = [
+    {
+      key: "date",
+      value: "Date",
+    },
+    {
+      key: "client",
+      value: "Client",
+    },
+    {
+      key: "text",
+      value: "Text",
+    },
+    {
+      key: "hours",
+      value: "Hours",
+    },
+    {
+      key: "hoursAmount",
+      value: "Hours amount",
+    },
+    {
+      key: "fixedText",
+      value: "Fixed text",
+    },
+    {
+      key: "fixedAmount",
+      value: "Fixed amount",
+    },
+    {
+      key: "actions",
+      value: "Actions",
+    },
+  ];
 </script>
 
 {#if user != null}
@@ -43,6 +88,16 @@
           city={user.city}
         />
       </Column>
+      <Button
+        on:click={() =>
+          openModal("Edit Wages", WageForm, { id: id, isUser: true }, () =>
+            getData(id)
+          )}
+        iconDescription="Wage"
+        kind="ghost"
+        icon={CurrencyDollar32}
+        style="margin-top: 2rem; margin-bottom: 2rem;"
+      />
       <Button
         on:click={() =>
           openModal("Edit User", UserForm, { defaultUser: user }, () =>
@@ -70,6 +125,27 @@
         icon={Delete32}
         style="margin-top: 2rem; margin-bottom: 2rem;"
       />
+    </Row>
+    <Row style="padding:0">
+      <Column style="padding:0">
+        <EntryTable
+          {openModal}
+          actionCallback={() => getData(id)}
+          bind:entries={filteredEntries}
+          {headers}
+          {id}
+        />
+        <Button
+          disabled
+          on:click={() =>
+            openModal(
+              "Export to File",
+              ExportForm,
+              { id: id, isUser: true },
+              () => getData(id)
+            )}>Export</Button
+        >
+      </Column>
     </Row>
   </Grid>
 {:else}

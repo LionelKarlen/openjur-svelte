@@ -5,6 +5,8 @@ import ExportData from "../../../../types/export/ExportData";
 import QRData from "../../../../types/export/QRdata";
 import Settings from "/type/database/Settings";
 import Docxtemplater from "docxtemplater";
+import { notify } from "./notifications";
+import NotificationType from "../../../../types/util/NotificationType";
 const pizzip = require("pizzip");
 const swissqrbill = require("swissqrbill");
 
@@ -23,22 +25,48 @@ export default function registerFileHandlers() {
 }
 
 export async function openFiles(path: string) {
-  //TODO: Error handling
-  shell.openPath(`${path}.docx`);
-  shell.openPath(`${path.split(".")[0]}.pdf`);
+  let doc = await shell.openPath(`${path}.docx`);
+  if (doc != "") {
+    notify({
+      text: doc,
+      type: NotificationType.ERROR,
+    });
+  }
+  let pdf = await shell.openPath(`${path.split(".")[0]}.pdf`);
+  if (pdf != "") {
+    notify({
+      text: pdf,
+      type: NotificationType.ERROR,
+    });
+  }
 }
 
 export async function deleteFiles(path: string) {
-  //TODO: Error handling
   try {
     fs.unlink(`${path}.docx`);
     fs.unlink(`${path.split(".")[0]}.pdf`);
-  } catch (error) {}
+  } catch (e) {
+    let x = "";
+    if (typeof e === "string") {
+      x = e.toUpperCase(); // works, `e` narrowed to string
+    } else if (e instanceof Error) {
+      x = e.message; // works, `e` narrowed to Error
+    }
+    notify({
+      text: x,
+      type: NotificationType.ERROR,
+    });
+  }
 }
 
-export function openFolder(path: string) {
-  //TODO: Error handling
-  shell.openPath(join(process.resourcesPath, "defaultFiles"));
+export async function openFolder(path: string) {
+  let x = await shell.openPath(join(process.resourcesPath, "defaultFiles"));
+  if (x != "") {
+    notify({
+      text: x,
+      type: NotificationType.ERROR,
+    });
+  }
 }
 
 export async function fileExists(path: string) {
@@ -56,29 +84,48 @@ export async function writeToFile(
   path: string,
   isUser = false
 ): Promise<boolean> {
-  let templatePath = isUser
-    ? settings.userTemplatePath
-    : settings.clientTemplatePath;
-  let content = await fs.readFile(templatePath, "binary");
-  let zip = new pizzip(content);
-  let doc;
   try {
-    doc = new Docxtemplater(zip, { linebreaks: true });
-  } catch (error) {
-    console.log(error);
-  }
+    let templatePath = isUser
+      ? settings.userTemplatePath
+      : settings.clientTemplatePath;
+    let content = await fs.readFile(templatePath, "binary");
+    let zip = new pizzip(content);
+    let doc;
+    try {
+      doc = new Docxtemplater(zip, { linebreaks: true });
+    } catch (error) {
+      console.log(error);
+    }
 
-  doc?.setData(exportData);
+    doc?.setData(exportData);
 
-  try {
-    doc?.render();
-  } catch (error) {
-    console.log(error);
+    try {
+      doc?.render();
+    } catch (error) {
+      console.log(error);
+    }
+    let buf = doc?.getZip().generate({
+      type: "nodebuffer",
+    });
+    fs.writeFile(`${path}.docx`, buf);
+    let pdf = new swissqrbill.PDF(qrData, `${path}.pdf`);
+    notify({
+      text: "File written",
+      type: NotificationType.SUCCESS,
+    });
+    return true;
+  } catch (e) {
+    let x = "";
+    if (typeof e === "string") {
+      x = e.toUpperCase(); // works, `e` narrowed to string
+    } else if (e instanceof Error) {
+      x = e.message; // works, `e` narrowed to Error
+    }
+
+    notify({
+      text: x,
+      type: NotificationType.ERROR,
+    });
+    return false;
   }
-  let buf = doc?.getZip().generate({
-    type: "nodebuffer",
-  });
-  fs.writeFile(`${path}.docx`, buf);
-  let pdf = new swissqrbill.PDF(qrData, `${path}.pdf`);
-  return true;
 }

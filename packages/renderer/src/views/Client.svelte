@@ -18,6 +18,8 @@
   import DeleteForm from "../components/forms/DeleteForm.svelte";
   import DeletionTypes from "../../../../types/util/DeletionTypes";
   import EntryTable from "../components/EntryTable.svelte";
+  import WageForm from "../components/forms/WageForm.svelte";
+  import { CurrencyDollar32 } from "carbon-icons-svelte";
 
   let headers = [
     {
@@ -37,16 +39,16 @@
       value: "Hours",
     },
     {
-      key: "amount",
-      value: "Amount",
+      key: "hoursAmount",
+      value: "Hours amount",
+    },
+    {
+      key: "fixedText",
+      value: "Fixed text",
     },
     {
       key: "fixedAmount",
-      value: "FixedAmount",
-    },
-    {
-      key: "invoiceID",
-      value: "InvoiceID",
+      value: "Fixed amount",
     },
     {
       key: "actions",
@@ -64,7 +66,7 @@
     client = await ipc.invoke("getClientByID", id);
     filteredEntries = await ipc.invoke("calculateTable", {
       id: id,
-      false: false,
+      isUser: false,
     });
   }
   $: console.log(client);
@@ -91,6 +93,14 @@
         style="margin-top: 2rem; margin-bottom: 2rem;margin-right:2rem;padding-right: 15px;"
         >New Entry</Button
       >
+      <Button
+        on:click={() =>
+          openModal("Edit Wages", WageForm, { id: id }, () => getData(id))}
+        iconDescription="Wage"
+        kind="ghost"
+        icon={CurrencyDollar32}
+        style="margin-top: 2rem; margin-bottom: 2rem;"
+      />
       <Button
         on:click={() =>
           openModal("Edit Client", ClientForm, { defaultClient: client }, () =>

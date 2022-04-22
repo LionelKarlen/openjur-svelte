@@ -45,11 +45,22 @@
 
 ### Features
 
-- updater
-- add wages
-- localise language
-- add user feedback toasts
+- ~~add wages~~
+- ~~add user feedback toasts~~
+- ~~add unbilled entries page~~
+- ~~add client page table/actions~~
+- ~~add wage delete~~
 
 ### Bug Fixes
 
-- fix icon
+- ~~fix icon~~
+- ~~fix headers~~
+- ~~fix default user in entry form~~
+- ~~fix allow delete user/client if entry exists~~
+
+# 0.7.0
+
+### Features
+
+- localise language
+- updater

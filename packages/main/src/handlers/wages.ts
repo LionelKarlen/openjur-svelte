@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { Knex } from "knex";
 import type id from "../../../../types/util/Id";
-import type Wage from "/type/database/Wage";
+import Wage from "../../../../types/database/Wage";
 const collection = "wages";
 
 export default function registerAmountHandlers(knexClient: Knex) {
@@ -19,6 +19,10 @@ export default function registerAmountHandlers(knexClient: Knex) {
 
   ipcMain.handle("getWagesByClientID", async (event, data: id) => {
     return await getWagesByClientID(knexClient, data);
+  });
+
+  ipcMain.handle("deleteWage", async (event, data: Wage) => {
+    return await deleteWage(knexClient, data);
   });
 
   ipcMain.handle("getWage", async (event, clientID: id, userID: id) => {
@@ -53,7 +57,18 @@ export async function getWagesByClientID(
 }
 
 export async function addWage(knexClient: Knex, wage: Wage) {
-  await knexClient.table(collection).insert(wage);
+  if (
+    (
+      await knexClient.table(collection).where({
+        userID: `${wage.userID}`,
+        clientID: `${wage.clientID}`,
+      })
+    ).length > 0
+  ) {
+    await updatewage(knexClient, wage);
+  } else {
+    await knexClient.table(collection).insert(wage);
+  }
 }
 
 export async function updatewage(knexClient: Knex, wage: Wage) {
@@ -75,13 +90,25 @@ export async function deleteWageByClientID(knexClient: Knex, id: id) {
     .delete();
 }
 
-export async function getWage(knexClient: Knex, clientID: id, userID: id) {
-  let wage = (await knexClient
-    .select("*")
-    .from(collection)
+export async function deleteWage(knexClient: Knex, wage: Wage) {
+  await knexClient
+    .table(collection)
     .where({
-      userID: `${userID}`,
-      clientID: `${clientID}`,
-    })) as Wage[];
+      clientID: `${wage.clientID}`,
+      userID: `${wage.userID}`,
+    })
+    .delete();
+}
+
+export async function getWage(knexClient: Knex, clientID: id, userID: id) {
+  let wage = (
+    await knexClient
+      .select("*")
+      .from(collection)
+      .where({
+        userID: `${userID}`,
+        clientID: `${clientID}`,
+      })
+  )[0] as Wage;
   return wage;
 }

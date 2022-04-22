@@ -6,6 +6,7 @@ import Util from "../util";
 import { formatDate } from "../../../renderer/src/services/util";
 import { getClientByID } from "./clients";
 import { getUserByID } from "./users";
+import { getWage } from "./wages";
 const collection = "entries";
 
 export default function registerEntryHandlers(knexClient: Knex) {
@@ -46,6 +47,12 @@ export default function registerEntryHandlers(knexClient: Knex) {
   ipcMain.handle("deleteEntry", async (event, data: id) => {
     return await deleteEntry(knexClient, data);
   });
+
+  ipcMain.handle("calculateUnbilledEntries", async (event) => {
+    let entries = await getUnbilledEntries(knexClient);
+    console.log("unbilled", entries);
+    return await calculateTable(knexClient, entries);
+  });
 }
 
 export async function getEntries(knexClient: Knex): Promise<Entry[]> {
@@ -76,6 +83,13 @@ export async function getEntriesByUserID(
     .where({
       userID: `${id}`,
     })) as Entry[];
+  return Util.sortEntries(entry);
+}
+
+export async function getUnbilledEntries(knexClient: Knex): Promise<Entry[]> {
+  let entry = (await knexClient.select("*").from(collection).where({
+    invoiceID: null,
+  })) as Entry[];
   return Util.sortEntries(entry);
 }
 
@@ -123,6 +137,8 @@ export async function calculateTable(knexClient: Knex, entries: Entry[]) {
     let client = await getClientByID(knexClient, value.clientID);
     let user = await getUserByID(knexClient, value.userID);
     console.log("user", user);
+    let wage = await getWage(knexClient, value.clientID, value.userID);
+    let amount = wage != null ? wage.amount : user.baseWage;
     filtered.push({
       id: value.id,
       date: formatDate(value.date),
@@ -130,9 +146,13 @@ export async function calculateTable(knexClient: Knex, entries: Entry[]) {
       user: user.name,
       text: value.text,
       hours: value.hours,
+      hoursAmount: value.hours * amount,
       invoiceID: value.invoiceID ? value.invoiceID : "N/A",
-      amount: user.baseWage * value.hours,
-      fixedAmount: value.fixcostAmount ? value.fixcostAmount : "N/A",
+      fixedText: value.fixcostText ? value.fixcostText : "",
+      amount:
+        amount * value.hours +
+        (value.fixcostAmount != null ? value.fixcostAmount : 0),
+      fixedAmount: value.fixcostAmount ? value.fixcostAmount : "",
     });
   }
   console.log("filtered", filtered);

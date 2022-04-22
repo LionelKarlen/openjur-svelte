@@ -100,6 +100,11 @@
         selectedClientIndex = i;
       }
     });
+    users.map((value: User, i: number) => {
+      if (value.id == userID) {
+        selectedUserIndex = i;
+      }
+    });
     validate();
   });
   $: console.log(selectedClientIndex);

@@ -3,6 +3,9 @@ import { Knex } from "knex";
 import type id from "../../../../types/util/Id";
 import type User from "/type/database/User";
 import Util from "../util";
+import { getEntriesByUserID } from "./entries";
+import { notify } from "./notifications";
+import NotificationType from "../../../../types/util/NotificationType";
 const collection = "users";
 
 export default function registerUserHandlers(knexClient: Knex) {
@@ -57,9 +60,20 @@ export async function updateUser(knexClient: Knex, User: User) {
       id: `${User.id}`,
     })
     .update(User);
+  notify({
+    text: "Client updated",
+    type: NotificationType.SUCCESS,
+  });
 }
 
 export async function deleteUser(knexClient: Knex, id: id) {
+  if ((await getEntriesByUserID(knexClient, id)).length != 0) {
+    notify({
+      text: "There are still entries for this User",
+      type: NotificationType.ERROR,
+    });
+    return;
+  }
   await knexClient
     .table(collection)
     .where({

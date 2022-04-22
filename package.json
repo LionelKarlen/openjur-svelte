@@ -1,6 +1,6 @@
 {
-  "name": "openjur-svelte",
-  "version": "0.5.0",
+  "name": "openjur",
+  "version": "0.6.0",
   "main": "packages/main/dist/index.cjs",
   "scripts": {
     "build": "node scripts/build.js",
