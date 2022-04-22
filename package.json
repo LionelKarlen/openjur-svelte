@@ -1,5 +1,5 @@
 {
-  "name": "openjur-svelte",
+  "name": "openjur",
   "version": "0.6.0",
   "main": "packages/main/dist/index.cjs",
   "scripts": {
