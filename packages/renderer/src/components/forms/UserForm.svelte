@@ -8,7 +8,7 @@
       name: name,
       address: address,
       city: city,
-      country: country,
+      country: "CH",
       zip: zip,
       baseWage: wage,
       id: defaultUser.id != null ? defaultUser.id : null,
@@ -25,7 +25,6 @@
     name = null;
     address = null;
     city = null;
-    country = null;
     zip = 0;
     isValid = false;
     wage = 0;
@@ -35,7 +34,6 @@
   let address: string;
   let zip: number;
   let city: string;
-  let country: string;
   let wage: number;
   export let defaultUser: User = {
     address: null,
@@ -52,7 +50,6 @@
       address = defaultUser.address;
       zip = defaultUser.zip;
       city = defaultUser.city;
-      country = defaultUser.country;
       wage = defaultUser.baseWage;
     }
     validate();
@@ -66,8 +63,7 @@
         wage >= 0 &&
         zip >= 0 &&
         address.length > 0 &&
-        city.length > 0 &&
-        country.length > 0;
+        city.length > 0;
     }
   }
 </script>
@@ -99,13 +95,6 @@
     bind:value={city}
     labelText="City"
     placeholder="Zürich"
-    on:change={validate}
-  />
-
-  <TextInput
-    bind:value={country}
-    labelText="Country"
-    placeholder="CH"
     on:change={validate}
   />
 </FormGroup>
