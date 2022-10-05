@@ -2,6 +2,8 @@ import Client from "/type/database/Client";
 import Entry from "/type/database/Entry";
 import User from "/type/database/User";
 import id from "/type/util/Id";
+import QRData from "../../../types/export/QRdata";
+import { calculateQRReferenceChecksum } from "swissqrbill/lib/node/cjs/shared/utils";
 
 export default class Util {
   static generateID(): id {
@@ -37,6 +39,23 @@ ${debtor.country}`;
     }
     finalCharges = getUniqueValues(finalCharges);
     return finalCharges;
+  }
+
+  // TODO: Implement
+  static generateQRReference(
+    qrData: QRData,
+    invoiceID: string,
+    debtorID: string
+  ): string {
+    let reference = debtorID + invoiceID;
+    let fillString = "0".repeat(26 - reference.length);
+    reference += fillString;
+
+    console.log(reference);
+    let checksum = calculateQRReferenceChecksum(reference);
+    console.log(checksum);
+    reference += checksum;
+    return reference.length > 1 ? reference : "";
   }
 }
 

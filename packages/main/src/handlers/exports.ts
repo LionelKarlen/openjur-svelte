@@ -16,6 +16,7 @@ import * as path from "path";
 import { openFiles, writeToFile } from "./file";
 import Invoice from "../../../../types/database/Invoice";
 import { addInvoice } from "./invoices";
+const swissqrbill = require("swissqrbill");
 
 export default function registerExportHandlers(knexClient: Knex) {
   ipcMain.handle("exportTable", async (event, data: ExportParams) => {
@@ -76,7 +77,7 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
     settings.data!.runningInvoiceID = 0;
   }
 
-  let invoiceID = `${settings.data?.runningInvoiceID}${year}`;
+  let invoiceID = `${settings.data!.runningInvoiceID}${year}`;
   settings.data!.runningInvoiceID += 1;
   let mwst = 7.7;
   let subTotal = chargeTotal + hoursTotal;
@@ -116,6 +117,9 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
     creditor: exportCreditor,
     debtor: exportDebtor,
   };
+  qrObject.reference = swissqrbill.utils.isQRIBAN(settings.data!.IBAN)
+    ? Util.generateQRReference(qrObject, invoiceID, debtor.id!)
+    : "";
   console.log("qrExport", qrObject);
   let exportPath = !isDevelopment
     ? `${path.join(process.resourcesPath, "export", invoiceID)}`
@@ -138,6 +142,7 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
     false
   );
   if (success) {
+    console.log("success");
     settings.write();
     let invoiceObject: Invoice = {
       amount: exportObject.total,
@@ -157,4 +162,5 @@ export async function exportTable(knexClient: Knex, params: ExportParams) {
     await openFiles(exportPath);
     return success;
   }
+  console.log("fail");
 }

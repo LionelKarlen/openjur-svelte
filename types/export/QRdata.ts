@@ -6,4 +6,5 @@ export default interface QRData {
   amount: number;
   creditor: Creditor;
   debtor: Debtor;
+  reference?: string;
 }

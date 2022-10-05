@@ -11,6 +11,8 @@
   import path from "/@/services/path";
   import type Settings from "/type/database/Settings";
 
+  //   const SwissQRBill = require("swissqrbill");
+
   let settings: Settings;
   export const submit = () => {
     console.log("submit");

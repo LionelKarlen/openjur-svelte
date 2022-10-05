@@ -1,16 +1,14 @@
 {
   "MWST": 7.7,
-  "clientTemplatePath": "",
-  "userTemplatePath": "",
-  "entryTextSuggestions": [
-  ],
-  "fixcostTextSuggestions": [
-  ],
-  "address": "",
-  "zip": null,
-  "city": "",
-  "IBAN": "",
-  "name": "",
+  "clientTemplatePath": "/home/lionel/Documents/programming/Web/openjur/openjur-svelte/res/template.docx",
+  "userTemplatePath": "/home/lionel/Documents/programming/Web/openjur/openjur-svelte/res/template.docx",
+  "entryTextSuggestions": [],
+  "fixcostTextSuggestions": [],
+  "address": "Bohnenstrasse 1",
+  "zip": 12334,
+  "city": "Zürich",
+  "IBAN": "CH44 3199 9123 0008 8901 2",
+  "name": "Test test",
   "runningYear": 2022,
-  "runningInvoiceID": 42
+  "runningInvoiceID": 44
 }
